@@ -449,7 +449,7 @@ onMounted(() => {
   border-radius: $radius-s  !important;
 }
 :deep(.dp__range_between) {
-  background: #eaf8f6 !important;
+  background: $color_main_light !important;
 }
 
 /* =========================================================
@@ -457,22 +457,22 @@ onMounted(() => {
 ========================================================= */
 :deep(.dp__theme_light),
 :deep(.dp__theme_dark) {
-  --dp-primary-color: #53b4a1 !important;
+  --dp-primary-color: $color_main !important;
   --dp-primary-text-color: #fff !important;
-  --dp-hover-color: #449b8a !important;
+  --dp-hover-color: $color_main_deepa !important;
   --dp-hover-text-color: #fff !important;
-  --dp-success-color: #53b4a1 !important;
+  --dp-success-color: $color_main !important;
   --dp-success-text-color: #fff !important;
-  --dp-icon-color: #53b4a1 !important;
-  --dp-hover-icon-color: #3a8c88 !important;
+  --dp-icon-color: $color_main !important;
+  --dp-hover-icon-color: $color_main_deep !important;
   --dp-secondary-color: #f7fcfb !important;
   --dp-border-color: #d2e8e8 !important;
   --dp-menu-border-color: #d2e8e8 !important;
   --dp-range-between-dates-background-color: #eaf8f6 !important;
 
   /* ✅ 버튼 색상 */
-  --dp-action-button-bg: #53b4a1 !important;
-  --dp-action-button-hover-bg: #449b8a !important;
+  --dp-action-button-bg: $color_main !important;
+  --dp-action-button-hover-bg: $color_main_deep !important;
   --dp-action-button-text-color: #fff !important;
 }
 
@@ -502,7 +502,7 @@ onMounted(() => {
   display: block !important;
   width: 100% !important;
   padding: 16px 0 !important;
-  background: #53b4a1 !important;
+  background: $color_main !important;
   color: #fff !important;
   text-align: center !important;
   font-weight: 700 !important;
@@ -516,7 +516,7 @@ onMounted(() => {
 :deep(.dp__action_select:hover),
 :deep(.dp__select:hover),
 :deep(.custom-select:hover) {
-  background: #449b8a !important;
+  background: $color_main !important;
 }
 
 //모바일에서만 보이는 예약전환 버튼들

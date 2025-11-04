@@ -49,7 +49,7 @@ const $alert = appContext.config.globalProperties.$alert;
 const reservationCode = ref("");
 const showModal = ref(false);
 
-// ✅ 예약번호 확인
+// 예약번호 확인
 const checkReservation = () => {
   if (!reservationCode.value) {
     $alert("예약번호를 입력해주세요.");
@@ -59,9 +59,10 @@ const checkReservation = () => {
   $alert(`예약번호 ${reservationCode.value} 확인 중...`);
 };
 
-// 모달 열기
+
+// 모달
 const openFindModal = () => {
-  showModal.value = true;
+  $alert("예약번호가 맞지 않습니다");
 };
 </script>
 

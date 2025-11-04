@@ -629,6 +629,13 @@ function handleMobileComplete() {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border: 1px solid #f0f0f0;
   transition: all 0.25s ease;
+  position: relative;
+  z-index: 1;
+
+  /* DatePicker가 카드 위에 표시되도록 */
+  &:has(.date-picker) {
+    overflow: visible;
+  }
 }
 
 .form_card.open {
@@ -688,17 +695,21 @@ function handleMobileComplete() {
   .left {
     display: flex;
     flex-direction: column;
+    position: relative; /* 추가 */
 
     .form_card {
       display: none; // 기본 숨김
       opacity: 0;
       transition: all 0.3s ease;
+      position: relative; /* 추가 */
+      z-index: 1; /* 추가 */
     }
 
     .form_card.open {
       display: block;
       opacity: 1;
       animation: fadeSlide 0.3s ease forwards;
+      z-index: 2; /* 열린 카드는 더 높은 z-index */
     }
   }
 

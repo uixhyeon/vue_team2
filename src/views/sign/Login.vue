@@ -8,7 +8,7 @@
         <!-- 이메일 -->
         <div class="email-row">
           <input type="text" placeholder="이메일 아이디" v-model="emailId" />
-          <span>@</span>
+          <!-- <span>@</span>
           <select v-model="emailDomain">
             <option disabled value="">도메인 선택</option>
             <option value="gmail.com">gmail.com</option>
@@ -16,7 +16,7 @@
             <option value="daum.net">daum.net</option>
             <option value="kakao.com">kakao.com</option>
             <option value="custom">직접 입력</option>
-          </select>
+          </select> -->
         </div>
 
         <!-- 직접입력 시 표시 -->
@@ -131,7 +131,7 @@ const handleLogin = () => {
   // 둘 중 하나라도 비었거나 이메일 조합이 안되면 에러
   if (!fullEmail.value || !password.value) {
     appContext.config.globalProperties.$alert(
-      "아이디 또는 비밀번호가 맞지 않습니다 ❌"
+      "아이디 또는 비밀번호가 맞지 않습니다"
     );
     return;
   }
@@ -140,14 +140,14 @@ const handleLogin = () => {
   const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!pattern.test(fullEmail.value)) {
     appContext.config.globalProperties.$alert(
-      "아이디 또는 비밀번호가 맞지 않습니다 ❌"
+      "아이디 또는 비밀번호가 맞지 않습니다"
     );
     return;
   }
 
   // 성공 가정
   appContext.config.globalProperties.$alert(
-    `로그인 성공 ✅\n${fullEmail.value}`
+    `로그인 성공 \n${fullEmail.value}`
   );
   router.push("/");
 };

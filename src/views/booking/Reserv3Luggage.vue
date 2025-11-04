@@ -56,7 +56,7 @@
       
 <!-- 배송일 -->
 <div class="form_group">
-  <label>배송지정일*</label>
+  <!-- <label>배송지정일*</label> -->
 <VueDatePicker
   v-model="localForm.deliveryDate"
   locale="ko"
@@ -129,6 +129,7 @@ const isComplete = computed(() => {
 });
 
 </script>
+
 
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
@@ -478,6 +479,14 @@ const isComplete = computed(() => {
   }
   }
 
+
+  
+
+  @media (min-width: 1025px) {
+  .btn-group {
+    display: none !important;
+  }
+}
 //모바일
 @media (max-width: 480px) {
   .btn-group {
@@ -492,4 +501,233 @@ const isComplete = computed(() => {
 }
 
 
+</style>
+<style lang="scss">
+/* ==========================
+📦 Delivery Form Card Styles
+========================== */
+
+/* 입력 카드 */
+.form_card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  position: relative;
+  padding: 15px 40px 10px;
+  transition: all 0.25s ease;
+  color: #444;
+  font-size: clamp(14px, 0.75rem + 0.3vw, 1rem);
+  box-sizing: border-box;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background: #3e9c9b;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+
+  &.open {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .card_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin: 15px 0;
+
+    h3 {
+      font-size: clamp(16px, 0.8rem + 0.5vw, 1.25rem);
+      font-weight: 600;
+      color: #333333;
+      margin: 0;
+    }
+
+    i {
+      font-size: 1rem;
+      color: #3e9c9b;
+    }
+  }
+
+  .form_group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      font-size: clamp(0.8125rem, 0.7rem + 0.2vw, 0.875rem);
+      font-weight: 500;
+      color: #555555;
+      margin-bottom: 6px;
+      padding-left: 3px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #e7e7e7;
+      background: transparent;
+      font-size: clamp(0.8125rem, 0.7rem + 0.2vw, 0.875rem);
+      color: #333333;
+      padding: 10px;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+        border-bottom: 1px solid #59B5B3;
+        outline: none;
+      }
+
+      &::placeholder {
+        color: #aaaaaa;
+      }
+    }
+  }
+
+  .addr-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .mini-btn {
+      width: 120px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #3e9c9b;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+      font-size: clamp(0.75rem, 0.65rem + 0.1vw, 0.8125rem);
+      transition: 0.2s;
+
+      &:hover {
+        background: #3A8C88;
+      }
+    }
+  }
+}
+
+/* 에러 메시지 */
+.error {
+  color: #e53935;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  padding-left: 3px;
+  line-height: 1.4;
+}
+
+/* ==========================
+📅 VueDatePicker (scoped 내부용)
+========================== */
+
+.date-picker {
+  width: 100%;
+  display: block;
+  position: relative;
+
+  :deep(.dp__input_wrap),
+  :deep(.dp__main) {
+    width: 100%;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  :deep(.dp__input) {
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid #e7e7e7 !important;
+    border-radius: 0 !important;
+    padding: 8px 8px !important;
+    font-size: clamp(0.85rem, 0.9vw, 0.95rem) !important;
+    color: #333 !important;
+    transition: border-color 0.25s ease;
+
+    &::placeholder {
+      color: #777 !important;
+    }
+
+    &:focus {
+      border-bottom: 1px solid #59B5B3 !important;
+      outline: none !important;
+    }
+  }
+
+  :deep(.dp__input_icon) {
+    display: none !important;
+  }
+}
+
+/* ==========================
+📱 하단 버튼 그룹
+========================== */
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 14px;
+  padding-bottom: 25px;
+
+  .card-btn {
+    flex: 1;
+    border-radius: 12px;
+    padding: 20px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .card-btn.left {
+    background: #f5f5f5;
+    color: #616161;
+    border: 1.5px solid #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+
+    &:hover {
+      background: #eaeaea;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  .card-btn.right {
+    background: rgba(62, 156, 155, 0.15);
+    color: #2E7E73;
+    border: 1.5px solid rgba(62, 156, 155, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+    &:hover {
+      background: rgba(62, 156, 155, 0.25);
+      box-shadow: 0 4px 10px rgba(62, 156, 155, 0.15);
+    }
+  }
+}
+
+@media (min-width: 1025px) {
+  .btn-group {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-group {
+    flex-direction: column;
+    gap: 10px;
+
+    .card-btn {
+      padding: 16px 0;
+      font-size: 0.95rem;
+    }
+  }
+}
 </style>
