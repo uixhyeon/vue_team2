@@ -585,4 +585,19 @@ onMounted(() => {
   }
 }
 
+/* 데스크탑에서 팝업을 화면 중앙(카드 기준 아닌 뷰포트 중앙)으로 고정 */
+
+  :deep(.dp__outer_menu_wrap) {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 99999 !important;
+    width: 560px !important;
+    max-width: 350px !important;
+    max-height: 80vh !important;
+    margin-top: 0 !important; /* 기존 margin-top 방지 */
+  }
+
+
 </style>

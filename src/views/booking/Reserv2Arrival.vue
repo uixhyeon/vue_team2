@@ -1,13 +1,18 @@
 <template>
   <div class="form_card" :class="{ open: isOpen }">
-    <!-- 헤더토글 -->
+    <!-- ✅ 헤더 클릭 시 열기/닫기 -->
     <div class="card_header" @click="$emit('toggle')">
       <h3>짐 가져오기</h3>
 
-      <!-- 완료시 체크표시 -->
-      <i v-if="isComplete" class="fa-solid fa-check" style="color: #4caf50; font-size: 1.1rem"></i>
+      <!-- ✅ 모든 입력 완료 시 초록색 체크 표시 -->
+      <i
+        v-if="isComplete"
+        class="fa-solid fa-check"
+        style="color:#4CAF50; font-size:1.1rem;"
+      ></i>
     </div>
 
+    <!-- ✅ 내용 -->
     <transition name="fade">
       <div v-show="isOpen" class="card_content" @click.stop>
         <!-- 픽업 주소 -->
@@ -23,7 +28,6 @@
             />
             <button type="button" class="mini-btn" @click="$emit('openPickup')">
               주소 검색
-              <i class="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
           <p v-if="touched.pickupAddress && errors.pickupAddress" class="error">
@@ -33,51 +37,60 @@
 
         <!-- 상세주소 -->
         <div class="form_group">
-          <!-- <label>상세주소*</label> -->
+          <label>상세주소*</label>
           <input
             type="text"
             placeholder="상세주소를 입력해주세요"
             v-model="localForm.pickupAddressDetail"
             @focus="$emit('touch', 'pickupAddressDetail')"
           />
-          <p v-if="touched.pickupAddressDetail && errors.pickupAddressDetail" class="error">
+          <p
+            v-if="touched.pickupAddressDetail && errors.pickupAddressDetail"
+            class="error"
+          >
             {{ errors.pickupAddressDetail }}
           </p>
         </div>
 
         <!-- 픽업일 -->
-        <div class="form_group">
-          <label>픽업일*</label>
-          <VueDatePicker
-            v-model="localForm.pickupDate"
-            locale="ko"
-            :enable-time-picker="false"
-            :auto-apply="false"
-            format="yyyy-MM-dd"
-            class="date-picker vuepick-date-picker"
-            placeholder="날짜를 선택해 주세요"
-            :action-row="{ showSelect: true, selectText: '선택 완료', showCancel: false }"
-            textInput
-            :closeOnAutoApply="false"
-            autoApply
-            :hideNavigation="['time']"
-            @update:model-value="$emit('touch', 'pickupDate')"
-            @focus-input="$emit('touch', 'pickupDate')"
-          />
+    <div class="form_group">
+  <label>픽업일*</label>
+<VueDatePicker
+  v-model="localForm.pickupDate"
+  locale="ko"
+  :enable-time-picker="false"
+  :auto-apply="false"
+  format="yyyy-MM-dd"
+  class="date-picker"
+  placeholder="날짜를 선택해 주세요"
+  :action-row="{ showSelect: true, selectText: '선택 완료', showCancel: false }"
+  @update:model-value="$emit('touch', 'pickupDate')"
+  @focus-input="$emit('touch', 'pickupDate')"
+/>
 
-          <p v-if="touched.pickupDate && errors.pickupDate" class="error">
-            {{ errors.pickupDate }}
-          </p>
-        </div>
 
-        <!-- @추가함 -->
-        <div class="btn-grup-wrap">
-          <div class="btn-group">
-            <!-- <p style="padding-left: 3px; margin-bottom:14px;"> 추가서비스를 이용하시겠어요?</p> -->
-            <button type="button" class="card-btn left" @click="$emit('move', 'locker')">사물함 예약을 수정해요</button>
-            <button type="button" class="card-btn right" @click="$emit('move', 'luggage')">짐을 집으로 받아요</button>
-          </div>
+  <p v-if="touched.pickupDate && errors.pickupDate" class="error">
+    {{ errors.pickupDate }}
+  </p>
+</div>
+
+        <!-- @@@@@@@@@@@@@@@@추가함 -->
+       <div class="btn-grup-wrap">
+
+         <div class="btn-group">
+           <!-- <p style="padding-left: 3px; margin-bottom:14px;"> 추가서비스를 이용하시겠어요?</p> -->
+           <button type="button" class="card-btn left" @click="$emit('move', 'locker' )">
+             사물함 예약을 수정해요
+            </button>
+            <button   type="button"
+            class="card-btn right"
+            @click="$emit('move', 'luggage' )">
+            짐을 집으로 받아요
+          </button>
         </div>
+      </div>
+
+
       </div>
     </transition>
   </div>
@@ -92,7 +105,7 @@ const props = defineProps({
   form: { type: Object, required: true },
   isOpen: { type: Boolean, default: true },
   errors: { type: Object, default: () => ({}) },
-  touched: { type: Object, default: () => ({}) },
+  touched: { type: Object, default: () => ({}) }, // ✅ 추가
 });
 
 const emit = defineEmits([
@@ -100,33 +113,28 @@ const emit = defineEmits([
   "openPickup",
   "toggle",
   "touch",
-  "move", //이동 간단하게 수정
+  "move" // ✅ 단일 이동 이벤트
 ]);
+
 
 const localForm = computed({
   get: () => props.form,
   set: (val) => emit("update:form", val),
 });
 
-//입력완료시 체크
+// ✅ 모든 입력 완료 시 체크 아이콘 표시
 const isComplete = computed(() => {
   const f = props.form;
   return f.pickupAddress && f.pickupAddressDetail && f.pickupDate;
 });
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
-
-:deep(.date-picker) {
-  width: 100%;
-  display: block;
-  position: relative;
-}
 
 .form_card {
   background: #fff;
-  border-radius: $radius-m;
+  border-radius: $radius-m ;
   border: 1px solid #f0f0f0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   position: relative;
@@ -144,8 +152,8 @@ const isComplete = computed(() => {
     width: 100%;
     height: 12px;
     background: $color_main;
-    border-top-left-radius: $radius-m;
-    border-top-right-radius: $radius-m;
+    border-top-left-radius: $radius-m ;
+    border-top-right-radius: $radius-m ;
   }
 
   &.open {
@@ -212,7 +220,7 @@ const isComplete = computed(() => {
     align-items: center;
 
     .mini-btn {
-      width: 120px;
+      width: 100px;
       padding: 8px 12px;
       border-radius: $radius-s;
       background: $color_main;
@@ -236,14 +244,81 @@ const isComplete = computed(() => {
   padding-left: 3px;
   line-height: 1.4;
 }
-// ==================================
 
-/* DatePicker 스타일 */
-:deep(.vuepick-date-picker) {
+
+// //모바일 버튼
+// ==============================
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 14px;
+   padding-bottom: 25px;
+
+  .card-btn {
+    flex: 1;
+    border-radius: $radius-m ;
+    padding: 20px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  /* 💚 왼쪽 버튼: 메인색 투명도 */
+  .card-btn.left {
+    background: #f5f5f5;
+    color: #616161;
+    border: 1.5px solid #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+
+    &:hover {
+      background: #eaeaea;
+      // transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+  }
+    
+    /* ⚪ 오른쪽 버튼 */
+  .card-btn.right {
+    background: rgba(83, 180, 161, 0.15); /* 메인색 15% 투명 */
+    color: #2E7E73;                       /* 본래 메인 텍스트 색 */
+    border: 1.5px solid rgba(83, 180, 161, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  
+    &:hover {
+      background: rgba(83, 180, 161, 0.25);
+      // transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(83, 180, 161, 0.15);
+    }
+  }
+  }
+
+/* 📱 모바일 대응 */
+@media (max-width: 1024px) {
+  .btn-group-wrap {
+    flex-direction: column;
+    gap: 10px;
+
+    .card-btn {
+      padding: 16px 0;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+// ============뷰데이픽커================
+
+// ============뷰데이픽커================
+//==========외부================
+.date-picker {
   width: 100%; /* ✅ 입력라인은 카드 전체 폭 기준으로 복구 */
-  display: block !important;
-  position: relative !important;
-  z-index: 9999 !important; /* ✅ 최상위 레이어로 설정 */ /* 내부 인풋 래퍼 초기화 */
+  display: block;
+  position: relative;
+
+  /* 내부 인풋 래퍼 초기화 */
   :deep(.dp__input_wrap),
   :deep(.dp__main) {
     width: 100%;
@@ -287,20 +362,20 @@ const isComplete = computed(() => {
 
 /* 팝업 전체 래퍼 */
 :deep(.dp__outer_menu_wrap) {
-  position: fixed !important; /* ✅ 뷰포트 기준으로 변경 */
-  top: 50% !important; /* ✅ 화면 중앙 */
-  left: 50% !important; /* ✅ 가운데 정렬 */
-  transform: translate(-50%, -50%) !important; /* ✅ 중앙 정렬 */
-  margin-top: 0 !important;
+  position: absolute !important;          /* ✅ 인풋 기준 */
+  top: 100% !important;                   /* ✅ 바로 밑 */
+  left: 50% !important;                   /* ✅ 가운데 정렬 */
+  transform: translateX(-50%) !important; /* ✅ 좌우 보정 */
+  margin-top: 8px !important;
 
   z-index: 9999 !important;
-  width: 350px !important; /* ✅ 가로 350px 고정 */
-  height: auto !important; /* ✅ 세로 자동 */
+  width: 350px !important;                /* ✅ 가로 350px 고정 */
+  height: auto !important;                /* ✅ 세로 자동 */
   max-width: calc(100vw - 40px) !important; /* ✅ 모바일 대응 */
-  max-height: 90vh !important; /* ✅ 너무 커지면 스크롤 */
+  max-height: 90vh !important;            /* ✅ 너무 커지면 스크롤 */
   overflow-y: auto !important;
 
-  border-radius: $radius-m !important;
+  border-radius: $radius-m  !important;
   background: rgba(255, 255, 255, 0.98) !important;
   border: 1px solid #d2e8e8 !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
@@ -324,7 +399,7 @@ const isComplete = computed(() => {
 :deep(.dp__menu_inner) {
   padding: 16px !important;
   background: #fff !important;
-  border-radius: $radius-m !important;
+  border-radius: $radius-m  !important;
 }
 
 :deep(.dp__calendar_header) {
@@ -338,7 +413,7 @@ const isComplete = computed(() => {
 
 :deep(.dp__calendar_item) {
   font-size: 0.9rem !important;
-  border-radius: $radius-s !important;
+  border-radius: $radius-s  !important;
   padding: 6px 0 !important;
   transition: 0.2s;
 }
@@ -348,7 +423,7 @@ const isComplete = computed(() => {
 :deep(.dp__range_end) {
   background: $color_main !important;
   color: #fff !important;
-  border-radius: $radius-s !important;
+  border-radius: $radius-s  !important;
 }
 
 :deep(.dp__range_between) {
@@ -376,7 +451,7 @@ const isComplete = computed(() => {
   --dp-menu-border-color: #d2e8e8 !important;
   --dp-range-between-dates-background-color: #eaf8f6 !important;
 
-  /* ✅ "선택 완료" 버튼 컬러 */
+  /* ✅ “선택 완료” 버튼 컬러 */
   --dp-action-button-bg: #53b4a1 !important;
   --dp-action-button-hover-bg: #449b8a !important;
   --dp-action-button-text-color: #fff !important;
@@ -388,6 +463,7 @@ const isComplete = computed(() => {
 :deep(.dp__action_row) {
   display: flex !important;
   justify-content: center !important;
+
 }
 
 /* ❌ 취소 버튼 숨기기 */
@@ -395,7 +471,7 @@ const isComplete = computed(() => {
   display: none !important;
 }
 
-/* ✅ "선택 완료" 버튼 */
+/* ✅ “선택 완료” 버튼 */
 :deep(.dp__select) {
   flex: 1 !important;
   width: 100% !important;
@@ -404,7 +480,7 @@ const isComplete = computed(() => {
   font-weight: 600 !important;
   color: #fff !important;
   background-color: #53b4a1 !important;
-  border-radius: $radius-s !important;
+  border-radius: $radius-s  !important;
   border: none !important;
   cursor: pointer !important;
   transition: background-color 0.25s ease !important;
@@ -412,70 +488,64 @@ const isComplete = computed(() => {
 :deep(.dp__select:hover) {
   background-color: #449b8a !important;
 }
+// 버튼이 커지게
 
-/* ==========================
-📱 하단 버튼 그룹
-========================== */
 
-.btn-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  margin-top: 14px;
-  padding-bottom: 25px;
 
-  .card-btn {
-    flex: 1;
-    border-radius: 12px;
-    padding: 20px 0;
-    font-size: 1rem;
-    font-weight: 600;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s ease;
+
+/* 데스크탑에서 팝업을 화면 중앙(카드 기준 아닌 뷰포트 중앙)으로 고정 */
+
+  :deep(.dp__outer_menu_wrap) {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 99999 !important;
+    width: 560px !important;
+    max-width: 350px !important;
+    max-height: 80vh !important;
+    margin-top: 0 !important; /* 기존 margin-top 방지 */
   }
 
-  .card-btn.left {
-    background: #f5f5f5;
-    color: #616161;
-    border: 1.5px solid #e0e0e0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-
-    &:hover {
-      background: #eaeaea;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    }
-  }
-
-  .card-btn.right {
-    background: rgba(62, 156, 155, 0.15);
-    color: #2e7e73;
-    border: 1.5px solid rgba(62, 156, 155, 0.25);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-
-    &:hover {
-      background: rgba(62, 156, 155, 0.25);
-      box-shadow: 0 4px 10px rgba(62, 156, 155, 0.15);
-    }
-  }
+// ...existing code...
+:deep(.dp__action_select),
+:deep(.dp__select),
+:deep(.custom-select) {
+  display: block !important;
+  width: 100% !important;
+  // padding: 16px 0 !important;
+  background: #3E9C9B !important;
+  color: #fff !important;
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  border-radius: $radius-m !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background 0.25s ease !important;
+}
+:deep(.dp__action_select:hover),
+:deep(.dp__select:hover),
+:deep(.custom-select:hover) {
+  background: darken(#3E9C9B, 6%) !important;
 }
 
-@media (min-width: 1025px) {
-  .btn-group {
-    display: none !important;
-  }
+:deep(.dp__select) {
+  display: block !important;
+  width: 100% !important;
+  padding: 16px 0 !important;
+  background: #3E9C9B !important;
+  color: #fff !important;
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  border-radius: $radius-m !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background 0.25s ease !important;
+}
+:deep(.dp__select:hover) {
+  background: darken(#3E9C9B, 6%) !important;
 }
 
-@media (max-width: 480px) {
-  .btn-group {
-    flex-direction: column;
-    gap: 10px;
-
-    .card-btn {
-      padding: 16px 0;
-      font-size: 0.95rem;
-    }
-  }
-}
 </style>

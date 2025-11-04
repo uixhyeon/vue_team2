@@ -248,6 +248,81 @@ const isComplete = computed(() => {
   padding-left: 3px;
   line-height: 1.4;
 }
+
+
+
+
+// //모바일 버튼
+// ==============================
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 14px;
+   padding-bottom: 25px;
+
+  .card-btn {
+    flex: 1;
+    border-radius: $radius-m;
+    padding: 20px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+//왼쪽
+  .card-btn.left {
+    background: #f5f5f5;
+    color: #616161;
+    border: 1.5px solid #e0e0e0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+
+    &:hover {
+      background: #eaeaea;
+      // transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+  }
+    
+   //오른쪽
+  .card-btn.right {
+    background: rgba(83, 180, 161, 0.15); //15%
+    color: #2E7E73;                     
+    border: 1.5px solid rgba(83, 180, 161, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  
+    &:hover {
+      background: rgba(83, 180, 161, 0.25);
+      // transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(83, 180, 161, 0.15);
+    }
+  }
+  }
+
+
+  
+
+  @media (min-width: 1025px) {
+  .btn-group {
+    display: none !important;
+  }
+}
+//모바일
+@media (max-width: 480px) {
+  .btn-group {
+    flex-direction: column;
+    gap: 10px;
+
+    .card-btn {
+      padding: 16px 0;
+      font-size: 0.95rem;
+    }
+  }
+}
+
 // ============뷰데이픽커================
 
 // ============뷰데이픽커================
@@ -418,7 +493,7 @@ const isComplete = computed(() => {
   font-size: 1rem !important;
   font-weight: 600 !important;
   color: #fff !important;
-  background-color: #53b4a1 !important;
+  background-color: #3E9C9B !important;
   border-radius: $radius-s !important;
   border: none !important;
   cursor: pointer !important;
@@ -429,305 +504,61 @@ const isComplete = computed(() => {
 }
 
 
-// //모바일 버튼
-// ==============================
-.btn-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  margin-top: 14px;
-   padding-bottom: 25px;
+/* 데스크탑에서 팝업을 화면 중앙(카드 기준 아닌 뷰포트 중앙)으로 고정 */
 
-  .card-btn {
-    flex: 1;
-    border-radius: $radius-m;
-    padding: 20px 0;
-    font-size: 1rem;
-    font-weight: 600;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s ease;
-  }
-
-//왼쪽
-  .card-btn.left {
-    background: #f5f5f5;
-    color: #616161;
-    border: 1.5px solid #e0e0e0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-
-    &:hover {
-      background: #eaeaea;
-      // transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    }
-  }
-    
-   //오른쪽
-  .card-btn.right {
-    background: rgba(83, 180, 161, 0.15); //15%
-    color: #2E7E73;                     
-    border: 1.5px solid rgba(83, 180, 161, 0.25);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  
-    &:hover {
-      background: rgba(83, 180, 161, 0.25);
-      // transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(83, 180, 161, 0.15);
-    }
-  }
+  :deep(.dp__outer_menu_wrap) {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 99999 !important;
+    width: 560px !important;
+    max-width: 350px !important;
+    max-height: 80vh !important;
+    margin-top: 0 !important; /* 기존 margin-top 방지 */
   }
 
 
-  
-
-  @media (min-width: 1025px) {
-  .btn-group {
-    display: none !important;
-  }
+// ...existing code...
+:deep(.dp__action_select),
+:deep(.dp__select),
+:deep(.custom-select) {
+  display: block !important;
+  width: 100% !important;
+  // padding: 16px 0 !important;
+  background: #3E9C9B !important;
+  color: #fff !important;
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  border-radius: $radius-m !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background 0.25s ease !important;
 }
-//모바일
-@media (max-width: 480px) {
-  .btn-group {
-    flex-direction: column;
-    gap: 10px;
+:deep(.dp__action_select:hover),
+:deep(.dp__select:hover),
+:deep(.custom-select:hover) {
+  background: darken(#3E9C9B, 6%) !important;
+}
 
-    .card-btn {
-      padding: 16px 0;
-      font-size: 0.95rem;
-    }
-  }
+:deep(.dp__select) {
+  display: block !important;
+  width: 100% !important;
+  padding: 16px 0 !important;
+  background: #3E9C9B !important;
+  color: #fff !important;
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  border-radius: $radius-m !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background 0.25s ease !important;
+}
+:deep(.dp__select:hover) {
+  background: darken(#3E9C9B, 6%) !important;
 }
 
 
-</style>
-<style lang="scss">
-/* ==========================
-📦 Delivery Form Card Styles
-========================== */
-
-/* 입력 카드 */
-.form_card {
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #f0f0f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  position: relative;
-  padding: 15px 40px 10px;
-  transition: all 0.25s ease;
-  color: #444;
-  font-size: clamp(14px, 0.75rem + 0.3vw, 1rem);
-  box-sizing: border-box;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 12px;
-    background: #3e9c9b;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-  }
-
-  &.open {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  }
-
-  .card_header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    margin: 15px 0;
-
-    h3 {
-      font-size: clamp(16px, 0.8rem + 0.5vw, 1.25rem);
-      font-weight: 600;
-      color: #333333;
-      margin: 0;
-    }
-
-    i {
-      font-size: 1rem;
-      color: #3e9c9b;
-    }
-  }
-
-  .form_group {
-    margin-bottom: 20px;
-
-    label {
-      display: block;
-      font-size: clamp(0.8125rem, 0.7rem + 0.2vw, 0.875rem);
-      font-weight: 500;
-      color: #555555;
-      margin-bottom: 6px;
-      padding-left: 3px;
-    }
-
-    input,
-    select {
-      width: 100%;
-      border: none;
-      border-bottom: 1px solid #e7e7e7;
-      background: transparent;
-      font-size: clamp(0.8125rem, 0.7rem + 0.2vw, 0.875rem);
-      color: #333333;
-      padding: 10px;
-      transition: border-color 0.2s ease;
-
-      &:focus {
-        border-bottom: 1px solid #59B5B3;
-        outline: none;
-      }
-
-      &::placeholder {
-        color: #aaaaaa;
-      }
-    }
-  }
-
-  .addr-input {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-
-    .mini-btn {
-      width: 120px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: #3e9c9b;
-      color: #ffffff;
-      border: none;
-      cursor: pointer;
-      font-size: clamp(0.75rem, 0.65rem + 0.1vw, 0.8125rem);
-      transition: 0.2s;
-
-      &:hover {
-        background: #3A8C88;
-      }
-    }
-  }
-}
-
-/* 에러 메시지 */
-.error {
-  color: #e53935;
-  font-size: 0.85rem;
-  margin-top: 4px;
-  padding-left: 3px;
-  line-height: 1.4;
-}
-
-/* ==========================
-📅 VueDatePicker (scoped 내부용)
-========================== */
-
-.date-picker {
-  width: 100%;
-  display: block;
-  position: relative;
-
-  :deep(.dp__input_wrap),
-  :deep(.dp__main) {
-    width: 100%;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  :deep(.dp__input) {
-    width: 100% !important;
-    background: transparent !important;
-    border: none !important;
-    border-bottom: 1px solid #e7e7e7 !important;
-    border-radius: 0 !important;
-    padding: 8px 8px !important;
-    font-size: clamp(0.85rem, 0.9vw, 0.95rem) !important;
-    color: #333 !important;
-    transition: border-color 0.25s ease;
-
-    &::placeholder {
-      color: #777 !important;
-    }
-
-    &:focus {
-      border-bottom: 1px solid #59B5B3 !important;
-      outline: none !important;
-    }
-  }
-
-  :deep(.dp__input_icon) {
-    display: none !important;
-  }
-}
-
-/* ==========================
-📱 하단 버튼 그룹
-========================== */
-
-.btn-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  margin-top: 14px;
-  padding-bottom: 25px;
-
-  .card-btn {
-    flex: 1;
-    border-radius: 12px;
-    padding: 20px 0;
-    font-size: 1rem;
-    font-weight: 600;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s ease;
-  }
-
-  .card-btn.left {
-    background: #f5f5f5;
-    color: #616161;
-    border: 1.5px solid #e0e0e0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-
-    &:hover {
-      background: #eaeaea;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    }
-  }
-
-  .card-btn.right {
-    background: rgba(62, 156, 155, 0.15);
-    color: #2E7E73;
-    border: 1.5px solid rgba(62, 156, 155, 0.25);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-
-    &:hover {
-      background: rgba(62, 156, 155, 0.25);
-      box-shadow: 0 4px 10px rgba(62, 156, 155, 0.15);
-    }
-  }
-}
-
-@media (min-width: 1025px) {
-  .btn-group {
-    display: none !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .btn-group {
-    flex-direction: column;
-    gap: 10px;
-
-    .card-btn {
-      padding: 16px 0;
-      font-size: 0.95rem;
-    }
-  }
-}
 </style>

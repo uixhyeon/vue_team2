@@ -254,7 +254,7 @@ padding: 40px 0 80px 0;
     gap: 2rem;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
     width: 100%;
     gap: 1.5rem;
   }
