@@ -257,12 +257,12 @@ const submitForm = (e) => {
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 .join-page {
-  min-height: 100vh;
+  // min-height: 100vh;
   background: #f5f7f7;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 0 3rem;
+  padding: 0 0 100px;
   position: relative;
   z-index: 1;
 }
@@ -533,14 +533,14 @@ const submitForm = (e) => {
 //===================추가함======
 
 .join-page {
-  min-height: 100vh;
+  
   background: #f5f7f7;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   z-index: 0;
-  padding-bottom: 4rem;
+ 
 }
 
 .header {
@@ -697,7 +697,7 @@ const submitForm = (e) => {
   .join-card {
     width: 90%;
     padding: 30px 20px;
-    margin-top: 30px;
+    // margin-top: 30px;
   }
 
   .header {
