@@ -394,7 +394,7 @@ input::placeholder {
   right: 22px;
   top: calc(100% + 12px);
   background: #fff;
-  border-radius: 22px;
+  border-radius: 20px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
   border: 1px solid #eee;
   padding: 14px;
@@ -443,7 +443,7 @@ input::placeholder {
   width: 36px;
   height: 36px;
   flex: 0 0 36px;
-  border-radius: 10px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -153,7 +153,7 @@ function slideStyle() {
 .info-main .title { font-weight: 700; font-size: clamp(26px, 2.8vw, 38px); color: #333; margin-bottom: clamp(20px, 2.5vw, 32px); }
 
 /* 탭 */
-.info-main .tabs { display: inline-flex; background: #f9fafa; border-radius: 6px; overflow: hidden; border: 1px solid #d9e1e1; margin: 0 auto clamp(28px, 4vw, 44px); }
+.info-main .tabs { display: inline-flex; background: #f9fafa; border-radius: 8px; overflow: hidden; border: 1px solid #d9e1e1; margin: 0 auto clamp(28px, 4vw, 44px); }
 @media (max-width: 390px) { .info-main .tabs { margin: 0; } }
 .info-main .tab { min-width: 160px; padding: 12px 18px; font-size: clamp(15px, 1.3vw, 20px); color: #888; background: #fff; border: none; cursor: pointer; transition: all 0.25s ease; font-weight: 500; }
 .info-main .tab.active { background: #3A8C88; color: #fff; }
@@ -190,7 +190,7 @@ function slideStyle() {
 }
 .zone-card {
   border: 1px solid #e2eaea;
-  border-radius: 14px;
+  border-radius: 12px;
   padding: 18px 18px 22px;
   background: #fff;
   text-align: center;

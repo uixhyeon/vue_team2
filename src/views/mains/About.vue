@@ -85,7 +85,8 @@ const services = [
   }
 
   .card{
-    max-width:290px; background:#fff; border:1px solid #e8e8e8; border-radius:14px;
+    max-width:290px; background:#fff; border:1px solid #e8e8e8; 
+    border-radius:20px;
     box-shadow:0 2px 6px rgba(0,0,0,.05); display:flex; flex-direction:column; align-items:center;
     text-align:center; padding:36px 16px 22px; transition:all .3s ease;
 

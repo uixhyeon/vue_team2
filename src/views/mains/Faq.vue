@@ -217,7 +217,7 @@ onBeforeUnmount(() => {
 .faq-main .download-card {
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 0;
   background: transparent;
   box-shadow: none;
@@ -232,8 +232,8 @@ onBeforeUnmount(() => {
 }
 
 /* 폰 */
-.faq-main .phone-mock{ width:160px; height:320px; border-radius:26px; background:#fff; position:relative; border:2px solid #0f585a;}
-.faq-main .phone-mock .notch{ position:absolute; top:12px; left:50%; transform:translateX(-50%); width:80px; height:18px; border-bottom-left-radius:10px; border-bottom-right-radius:10px; background:#0f585a;}
+.faq-main .phone-mock{ width:160px; height:320px; border-radius:20px; background:#fff; position:relative; border:2px solid #0f585a;}
+.faq-main .phone-mock .notch{ position:absolute; top:12px; left:50%; transform:translateX(-50%); width:80px; height:18px; border-bottom-left-radius:8px; border-bottom-right-radius:10px; background:#0f585a;}
 .faq-main .phone-mock .screen{
   position:absolute; inset:18px; border-radius:20px; background:#ffffff;
   display:flex; align-items:center; justify-content:center;

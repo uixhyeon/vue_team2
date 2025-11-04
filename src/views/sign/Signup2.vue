@@ -524,7 +524,7 @@ const submitForm = (e) => {
 
     &:hover {
       background: $color_main_deep;
-      transform: translateY(-1px);
+      // transform: translateY(-1px)
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     }
   }
