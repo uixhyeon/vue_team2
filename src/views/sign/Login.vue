@@ -181,15 +181,17 @@ const goGuestReserve = () => {
   display: flex;
   justify-content: center;
   align-items: stretch;
-  min-height: 60vh;
+  // min-height: 60vh;
   max-width: 1120px;
   margin: 0 auto 40px;
   gap: 0;
 
+ 
   @media (max-width: 900px) {
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    // min-height: 100vh;
+    margin: 0 auto 20px; // 아래 여백 줄임
   }
 }
 
