@@ -97,7 +97,7 @@ const formatDate = (date) => {
     // 변환 실패 시 원본 반환
     if (isNaN(parsed)) return String(date);
 
-    // ✅ 한국시간(KST) 기준 날짜 문자열로 변환
+    // 한국시간(KST) 기준 날짜 문자열로 변환
     const local = new Date(parsed.getTime() + 9 * 60 * 60 * 1000);
 
     return local.toLocaleDateString("ko-KR", {
@@ -110,12 +110,6 @@ const formatDate = (date) => {
     return String(date);
   }
 };
-
-
-
-
-
-
 
 const formatKrw = (value) => {
   const num = Number(value);
@@ -131,9 +125,7 @@ const formatKrw = (value) => {
 
 
 @use "/src/assets/style/variables" as *;
-/* =========================================================
- ✅ Summary 카드 (상단 before + hover after 포함)
-========================================================= */
+// 써머리
 .summary_card {
   position: relative;
   width: 100%;
@@ -145,7 +137,6 @@ padding: 15px 40px 10px;
   box-sizing: border-box;
   transition: all 0.3s ease;
 
-  /* 🔹 상단 컬러 바 */
   &::before {
     content: "";
     position: absolute;
@@ -158,10 +149,8 @@ padding: 15px 40px 10px;
     border-top-right-radius: $radius-m;
   }
 
-  /* 🔹 hover 효과 (밝은 테두리 강조) */
   &:hover {
     border-color: #d9efeb;
-    // box-shadow: 0 4px 16px rgba(83, 180, 161, 0.1);
   }
 
   .card_title {
@@ -171,7 +160,7 @@ padding: 15px 40px 10px;
     margin: 15px 0;
   }
 
-  /* ✅ 요약 테이블 */
+//요약
   table {
     width: 100%;
     border-collapse: collapse;
@@ -217,7 +206,7 @@ padding: 15px 40px 10px;
     }
   }
 
-  /* ✅ 입력 전 안내문 */
+// 전 안내문
   .summary-guide {
     text-align: center;
     padding: 60px 20px;
@@ -230,7 +219,7 @@ padding: 15px 40px 10px;
     transition: opacity 0.3s ease;
   }
 
-  /* ✅ 섹션 소제목 */
+//소제목
   .s-title {
     color: #333 !important;
     font-size: $text-sm !important;
@@ -239,9 +228,7 @@ padding: 15px 40px 10px;
   }
 }
 
-/* =========================================================
- ✅ Summary 하단 버튼
-========================================================= */
+//제출버튼
 .submit_btn {
   width: 70%;
   padding: 14px 0;
@@ -260,9 +247,7 @@ padding: 15px 40px 10px;
 
 }
 
-/* =========================================================
- ✅ 반응형
-========================================================= */
+//반응형
 @media (max-width: 1024px) {
   .summary_card {
     width: 90%;

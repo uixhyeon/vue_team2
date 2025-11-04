@@ -1,10 +1,10 @@
 <template>
   <div class="form_card" :class="{ open: isOpen }">
-    <!-- ✅ 카드 헤더 클릭으로 열기/닫기 -->
+    <!--  카드 헤더 클릭으로 열기/닫기 -->
     <div class="card_header" @click="$emit('toggle')">
       <h3>사물함 예약*</h3>
 
-      <!-- ✅ 모든 입력 완료 시 체크 아이콘 표시 -->
+      <!--  모든 입력 완료 시 체크 아이콘 표시 -->
       <i
         v-if="isComplete"
         class="fa-solid fa-check"
@@ -12,7 +12,7 @@
       ></i>
     </div>
 
-    <!-- ✅ 내용 (토글로 열고닫기) -->
+    <!-- 내용 (토글로 열고닫기) -->
     <transition name="fade">
       <div v-show="isOpen" class="card_content" @click.stop>
         <!-- 이름 -->
@@ -65,7 +65,7 @@
       readonly
         @focus="$emit('touch', 'address')"
     />
- <!-- ✅ 수정된 버튼 -->
+ <!-- 수정된 버튼 -->
 <button
   type="button"
   class="mini-btn"
@@ -73,6 +73,7 @@
   @click="handleOpenBranch"
 >
   지점 선택
+   <i class="fa-solid fa-magnifying-glass"></i>
 </button>
 
   </div>
@@ -102,7 +103,7 @@
   @open="$emit('touch', 'dateRange')"
   @update:model-value="$emit('touch', 'dateRange')"
 >
-  <!-- ✅ v11에서는 slot 이름이 action-row -->
+  <!-- v11에서는 slot 이름이 action-row -->
   <template #action-row="{ selectDate }">
     <button
       class="dp__select custom-select"
@@ -165,10 +166,10 @@ const localForm = computed({
   set: (val) => emit("update:form", val),
 });
 
-// ✅ 전역 Alert 접근
+// 전역 Alert 접근
 const { appContext } = getCurrentInstance();
 
-// ✅ 버튼 클릭 시 동작
+// 버튼 클릭 시 동작
 function handleOpenBranch() {
   if (!localForm.value.size) {
     appContext.config.globalProperties.$alert("사물함 사이즈를 먼저 선택해주세요.");
@@ -177,7 +178,7 @@ function handleOpenBranch() {
   emit("openBranch"); // 부모로 전달
 }
 
-// ✅ 입력 완료 여부 (체크 아이콘 표시)
+// 입력 완료 여부 (체크 아이콘 표시)
 const isComplete = computed(() => {
   const f = props.form;
   return (
@@ -194,12 +195,12 @@ const isComplete = computed(() => {
 // <script setup> 내부 하단에 추가
 // <script setup> 내부 하단에 추가
 function goNextStep() {
-  if (window.innerWidth > 1024) return; // ✅ PC에서는 작동 안 함
+  if (window.innerWidth > 1024) return; // PC에서는 작동 안 함
   if (!isComplete.value) {
     appContext.config.globalProperties.$alert("사물함 예약 정보를 모두 입력해주세요.");
     return;
   }
-  emit("next"); // ✅ 부모에 openSection 변경 요청
+  emit("next"); // 부모에 openSection 변경 요청
 }
 
 import { onMounted } from "vue";
@@ -213,9 +214,7 @@ onMounted(() => {
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 
-/* =========================================================
-  FORM CARD 기본 구조
-========================================================= */
+//기본
 .form_card {
   background: #fff;
   border-radius: $radius-m;
@@ -229,9 +228,9 @@ onMounted(() => {
   box-sizing: border-box;
 
   // 뷰데이픽커를위한설정
- position: relative; /* ✅ 기준점 부여 */
-  z-index: 1; /* ✅ 기본 카드보다 한 단계 위 */
-  overflow: visible !important; /* ✅ 자식 팝업이 가려지지 않도록 */
+ position: relative; //기준점..부여
+  z-index: 1; //위에올리기
+  overflow: visible !important; //팝업잘림방지
 
   &::before {
     content: "";
@@ -249,7 +248,7 @@ onMounted(() => {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   }
 
-  /* 헤더 */
+// 헤더
   .card_header {
     display: flex;
     justify-content: space-between;
@@ -270,7 +269,7 @@ onMounted(() => {
     }
   }
 
-  /* 폼 그룹 */
+ //폼그룹
   .form_group {
     margin-bottom: 20px;
 
@@ -305,14 +304,14 @@ onMounted(() => {
     }
   }
 
-  /* 주소 입력 */
+ // 주소 입력
   .addr-input {
     display: flex;
     gap: 8px;
     align-items: center;
 
     .mini-btn {
-      width: 100px;
+      width: 120px;
       padding: 8px 12px;
       border-radius: $radius-s;
       background: $color_main;
@@ -335,7 +334,7 @@ onMounted(() => {
   }
 }
 
-/* 에러 메시지 */
+// 에러
 .error {
   color: #e53935;
   font-size: 0.85rem;
@@ -520,9 +519,7 @@ onMounted(() => {
   background: #449b8a !important;
 }
 
-/* =========================================================
-  [4] 모바일 하단 버튼 그룹
-========================================================= */
+//모바일에서만 보이는 예약전환 버튼들
 .btn-group {
   display: flex;
   justify-content: space-between;
@@ -541,7 +538,7 @@ onMounted(() => {
     transition: all 0.25s ease;
   }
 
-  /* 💚 왼쪽 버튼 (중립 회색톤) */
+//왼쪽 회색
   .card-btn.left {
     background: #f5f5f5;
     color: #616161;
@@ -554,7 +551,7 @@ onMounted(() => {
     }
   }
 
-  /* 💚 오른쪽 버튼 (메인컬러 투명버전) */
+ //오른쪽 투명 메인
   .card-btn.right {
     background: rgba(83, 180, 161, 0.15);
     color: #2e7e73;
@@ -567,13 +564,15 @@ onMounted(() => {
     }
   }
 }
-/* ✅ PC에서는 버튼그룹 숨김 */
+
+
+//버튼그룹 피씨에서는 안보임
 @media (min-width: 1025px) {
   .btn-group {
     display: none !important;
   }
 }
-/* 📱 모바일 대응 */
+//모바일
 @media (max-width: 480px) {
   .btn-group {
     flex-direction: column;

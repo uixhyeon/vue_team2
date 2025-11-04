@@ -51,11 +51,11 @@ const verifyCode = ref("");
 const codeSent = ref(false);
 const foundId = ref("");
 
-// ✅ 전역 $alert 접근 (Composition API에서)
+// 전역 $alert 접근 (Composition API에서)
 const { appContext } = getCurrentInstance();
 const $alert = appContext.config.globalProperties.$alert;
 
-// ✅ 인증 요청
+// 인증 요청
 const sendCode = () => {
   if (!phone.value) {
     $alert("휴대폰 번호를 입력해주세요.");
@@ -65,7 +65,7 @@ const sendCode = () => {
   codeSent.value = true;
 };
 
-// ✅ 인증 확인
+// 인증 확인
 const verify = () => {
   if (verifyCode.value === "1234") {
     foundId.value = "uixhyeon123"; // 예시
@@ -75,7 +75,7 @@ const verify = () => {
   }
 };
 
-// ✅ 모달 닫기
+// 모달 닫기
 const closeModal = () => {
   emit("close");
 };
@@ -84,7 +84,7 @@ const closeModal = () => {
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 
-/* ✅ 모달 배경 */
+//모달배경
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -95,7 +95,7 @@ const closeModal = () => {
   z-index: 2000;
 }
 
-/* ✅ 모달 박스 */
+//박스
 .modal-box {
   background: #fff;
   width: 420px;
@@ -110,7 +110,7 @@ const closeModal = () => {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ✅ 헤더 */
+
 .modal-header {
   background: $color_main;
   color: #fff;
@@ -133,7 +133,7 @@ const closeModal = () => {
   }
 }
 
-/* ✅ 본문 */
+//바디
 .modal-body {
   padding: 24px 28px;
 
@@ -186,14 +186,13 @@ const closeModal = () => {
   }
 }
 
-/* ✅ 푸터 */
 .modal-footer {
   padding: 20px;
   border-top: 1px solid #eee;
   text-align: center;
 }
 
-/* ✅ 버튼 */
+
 .btn {
   background: $color_main;
   color: #fff;

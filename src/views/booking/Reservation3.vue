@@ -1,12 +1,12 @@
 <template>
-  <!-- ✅ 결제 완료 -->
+  <!-- 결제 완료 -->
   <section class="reserve-page">
     <div class="inner">
       <Stepper :current-step="3" />
 
       <div class="card-test">
         <div class="form_card receipt_card">
-          <!-- 💳 결제 완료 -->
+          <!-- 결제 완료 -->
           <div class="card_header">
             <h3>결제 완료</h3>
           </div>
@@ -35,12 +35,12 @@
 
           </div>
 
-          <!-- 📦 예약 완료 -->
+          <!-- 예약 완료 -->
           <div class="card_header">
           </div>
           
           <div class="card_content">
-            <!-- ✅ 요약 보기 -->
+            <!-- 요약 보기 -->
             <div v-if="!showDetail" class="summary-view">
   <h3 class="summary-title">예약 성공!</h3>
 
@@ -66,7 +66,7 @@
 </div>
 
 
-<!-- ✅ 상세 보기 -->
+<!-- 상세 보기 -->
 <div v-else class="detail-view">
               <h3>예약 완료</h3>
               <table class="receipt_table">
@@ -96,7 +96,7 @@
             </div>
           </div>
 
-          <!-- ✅ QR 코드는 항상 표시 (토글 밖으로 분리됨) -->
+          <!-- 큐알표시 -->
           <div class="qr-section always">
             <img :src="qrImage" alt="예약 QR코드" class="qr-thumb" @click="showQRModal = true" />
             <p class="qr-desc">예약 QR코드</p>
@@ -109,7 +109,7 @@
       </div>
     </div>
 
-    <!-- ✅ QR 코드 확대 모달 -->
+    <!-- 큐알 확대 모달 -->
     <transition name="fade">
       <div v-if="showQRModal" class="qr-modal" @click.self="showQRModal = false">
         <div class="qr-modal-content">
@@ -135,7 +135,7 @@ const router = useRouter();
 // 예약받기
 const orderId = ref(route.query.orderId || "");
 
-// ✅ 전달된 데이터 받기
+// 전달된 데이터 받기
 const form = ref(
   route.query.form
     ? JSON.parse(route.query.form)
@@ -211,7 +211,7 @@ const downloadQR = () => {
 
 
 
-// ✅ 날짜 포맷 함수 제일 밑에 둑기
+// 날짜 포맷 함수 제일 밑에 둑기
 
 const formatDate = (date) => {
   if (!date) return "";
@@ -223,10 +223,10 @@ const formatDate = (date) => {
   });
 };
 
-// ✅ 요약 / 상세보기 상태
+// 요약 / 상세보기 상태
 const showDetail = ref(false);
 
-// ✅ 선택된 서비스 계산
+// 선택된 서비스 계산
 const selectedServices = computed(() => {
   const list = [];
   if (form.value.size) list.push("사물함 대여");
@@ -235,7 +235,7 @@ const selectedServices = computed(() => {
   return list;
 });
 
-// ✅ 짧은 날짜 포맷
+// 짧은 날짜 포맷
 const formatShortDate = (date) => {
   if (!date) return "";
   const d = new Date(date);
@@ -248,12 +248,8 @@ const formatShortDate = (date) => {
 </script>
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
-@use "/src/assets/style/_reservation" as *;
 
-/* =========================================================
-🎨 폰트 계층 시스템 (Responsive Type Scale)
-========================================================= */
-
+// ===========폰트크기설정================
 /* // 메인제목 : 20~22px */
 .main-title, .card_header h3 {
   font-size: clamp(1.25rem, 1.8vw, 1.375rem);
@@ -287,11 +283,7 @@ const formatShortDate = (date) => {
   line-height: 1.5;
 }
 
-/* =========================================================
-📦 기존 Reservation3.vue 스타일 유지
-========================================================= */
-
-//====배경 레이아웃================
+//배경부터
 .reserve-page {
   background: #f5f7f7;
 }
@@ -619,9 +611,9 @@ const formatShortDate = (date) => {
     margin-bottom: 1rem;
   }
 
-  /* ✅ 여기 추가 */
+  /* 여기 추가 */
   .date-box {
-    background: $color_main_background; /* 연두색 배경 */
+    background: $color_main_background; 
     border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: $radius-s;
     color: #222;
@@ -630,7 +622,7 @@ const formatShortDate = (date) => {
     display: inline-block;
     padding: clamp(10px, 1vw, 12px) clamp(14px, 2vw, 16px);
     margin-bottom: 1.2rem;
-    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.03); /* 💡 은은한 입체감 */
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.03); 
   }
 
   .pickup-delivery {

@@ -3,7 +3,7 @@
     <div class="confirm-box">
       <h2>입력 내용 확인</h2>
 
-      <!-- ✅ 사물함 예약 -->
+      <!-- 사물함 예약 -->
       <section v-if="form.name || form.phone || form.size || form.address">
         <h3 class="section-title">사물함 예약</h3>
         <ul class="confirm-list">
@@ -18,7 +18,7 @@
         </ul>
       </section>
 
-      <!-- ✅ 짐 가져오기 -->
+      <!-- 짐 가져오기 -->
       <section v-if="form.pickupAddress">
         <h3 class="section-title">짐 가져오기</h3>
         <ul class="confirm-list">
@@ -33,7 +33,7 @@
         </ul>
       </section>
 
-      <!-- ✅ 집으로 보내기 -->
+      <!-- 집으로 보내기 -->
       <section v-if="form.homeAddress">
         <h3 class="section-title">집으로 보내기</h3>
         <ul class="confirm-list">
@@ -48,12 +48,12 @@
         </ul>
       </section>
 
-      <!-- ✅ 최종 금액 -->
+      <!-- 최종 금액 -->
       <ul class="confirm-list total">
         <li><strong>예상 금액</strong><span>{{ totalPrice.toLocaleString() }}원</span></li>
       </ul>
 
-      <!-- ✅ 버튼 영역 -->
+      <!-- 버튼 영역 -->
       <div class="confirm-actions">
         <button class="btn line" @click="$emit('close')">수정하기</button>
         <button class="btn primary" @click="$emit('submit')">확인하고 진행</button>

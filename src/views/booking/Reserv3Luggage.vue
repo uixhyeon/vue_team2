@@ -1,10 +1,10 @@
 <template>
   <div class="form_card" :class="{ open: isOpen }">
-    <!-- ✅ 헤더 클릭으로 토글 -->
+<!-- 헤더토글 -->
     <div class="card_header" @click="$emit('toggle')">
       <h3>집으로 보내기</h3>
 
-      <!-- ✅ 모든 입력 완료 시 체크 아이콘 표시 -->
+    <!-- 완료시 체크 -->
       <i
         v-if="isComplete"
         class="fa-solid fa-check"
@@ -12,7 +12,7 @@
       ></i>
     </div>
 
-    <!-- ✅ 내용 -->
+
     <transition name="fade">
       <div v-show="isOpen" class="card_content" @click.stop>
         <!-- 주소 입력 -->
@@ -28,6 +28,7 @@
             />
             <button type="button" class="mini-btn" @click="$emit('openHome')">
               주소 검색
+              <i class="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
           <p v-if="touched.homeAddress && errors.homeAddress" class="error">
@@ -75,8 +76,8 @@
 </div>
 
 
-            <!-- @@@@@@@@@@@@@@@@추가함 -->
-   <!-- ✅ 수정된 코드 -->
+            <!-- @추가함 -->
+
 <!-- <label style="padding-left: 3px;">서비스 추가하기</label> -->
 <div class="btn-group">
   <button type="button" class="card-btn left" @click="$emit('move', 'locker')">
@@ -103,7 +104,7 @@ const props = defineProps({
   form: { type: Object, required: true },
   isOpen: { type: Boolean, default: true },
   errors: { type: Object, default: () => ({}) },
-  touched: { type: Object, default: () => ({}) }, // ✅ 추가
+  touched: { type: Object, default: () => ({}) }, 
 });
 
 const emit = defineEmits([
@@ -111,7 +112,7 @@ const emit = defineEmits([
   "openPickup",
   "toggle",
   "touch",
-  "move" // ✅ 단일 이동 이벤트
+  "move" 
 ]);
 
 
@@ -121,7 +122,7 @@ const localForm = computed({
   set: (val) => emit("update:form", val),
 });
 
-// ✅ 모든 입력 완료 시 체크 아이콘 표시
+//입력완료시 체크
 const isComplete = computed(() => {
   const f = props.form;
   return f.homeAddress && f.homeAddressDetail && f.deliveryDate;
@@ -132,9 +133,7 @@ const isComplete = computed(() => {
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 
-/* =========================================================
- ✅ FORM CARD (입력 카드)
-========================================================= */
+//입력 카드
 .form_card {
   background: #fff;
   border-radius: $radius-m;
@@ -223,7 +222,7 @@ const isComplete = computed(() => {
     align-items: center;
 
     .mini-btn {
-      width: 100px;
+      width: 120px;
       padding: 8px 12px;
       border-radius: $radius-s;
       background: $color_main;
@@ -240,7 +239,7 @@ const isComplete = computed(() => {
   }
 }
 
-/* 에러 문구 스타일 */
+//에러
 .error {
   color: #e53935;
   font-size: 0.85rem;
@@ -450,7 +449,7 @@ const isComplete = computed(() => {
     transition: all 0.25s ease;
   }
 
-  /* 💚 왼쪽 버튼: 메인색 투명도 */
+//왼쪽
   .card-btn.left {
     background: #f5f5f5;
     color: #616161;
@@ -464,10 +463,10 @@ const isComplete = computed(() => {
     }
   }
     
-    /* ⚪ 오른쪽 버튼 */
+   //오른쪽
   .card-btn.right {
-    background: rgba(83, 180, 161, 0.15); /* 메인색 15% 투명 */
-    color: #2E7E73;                       /* 본래 메인 텍스트 색 */
+    background: rgba(83, 180, 161, 0.15); //15%
+    color: #2E7E73;                     
     border: 1.5px solid rgba(83, 180, 161, 0.25);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   
@@ -479,7 +478,7 @@ const isComplete = computed(() => {
   }
   }
 
-/* 📱 모바일 대응 */
+//모바일
 @media (max-width: 480px) {
   .btn-group {
     flex-direction: column;
