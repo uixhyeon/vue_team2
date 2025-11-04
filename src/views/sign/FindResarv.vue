@@ -2,7 +2,7 @@
   <div class="check-page">
     <!-- 상단 로고 -->
     <header class="header">
-      <img src="/public/images/mains/header/logo-1.png" alt="마타주 로고" class="logo" />
+      <img src="/images/mains/header/logo-1.png" alt="마타주 로고" class="logo" />
     </header>
 
     <!-- 중앙 카드 -->

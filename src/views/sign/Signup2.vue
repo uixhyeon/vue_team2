@@ -2,11 +2,11 @@
   <div class="join-page">
     <header class="header">
       <div class="logo left">
-        <img src="/public/images/mains/header/logo-1.png" alt="로고" />
+        <img src="/images/mains/header/logo-1.png" alt="로고" />
       </div>
       <h1>회원가입</h1>
       <div class="logo right">
-        <img src="/public/images/mains/header/logo-1.png" alt="로고" />
+        <img src="/images/mains/header/logo-1.png" alt="로고" />
       </div>
     </header>
 

@@ -200,7 +200,7 @@ const goToHome = () => {
 
 // 모달띄우기
 const showQRModal = ref(false);
-const qrImage = "/public/images/reservation/qrcode.png"; // 실제 QR 이미지 경로
+const qrImage = "/images/reservation/qrcode.png"; // 실제 QR 이미지 경로
 
 const downloadQR = () => {
   const link = document.createElement("a");

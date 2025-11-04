@@ -84,7 +84,7 @@
           </div>
         </div>
         <div class="coupon-card">
-          <img src="/public/images/sign/Login_cupon.png" alt="쿠폰" />
+          <img src="/images/sign/Login_cupon.png" alt="쿠폰" />
         </div>
       </div>
     </div>
@@ -334,7 +334,7 @@ const goGuestReserve = () => {
       rgba(255, 255, 255, 0.8),
       rgba(255, 255, 255, 0.4)
     ),
-    url(/public/images/sign/2462865.png) no-repeat center center / cover;
+    url(/images/sign/2462865.png) no-repeat center center / cover;
   padding: 40px;
   border-radius: $radius-s;
   border: 1px solid #e7e7e7;
