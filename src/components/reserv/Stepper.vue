@@ -26,7 +26,7 @@ defineProps({
   },
 });
 
-const steps = ["코드 디자인", "페이지 유형 선택", "페이지 정보 입력"];
+const steps = ["예약 하기", "확인 및 결제", "예약 완료"];
 
 const windowWidth = ref(window.innerWidth);
 const handleResize = () => (windowWidth.value = window.innerWidth);
@@ -59,7 +59,7 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
   text-align: center;
   color: #888;
 
-  /* ✅ 원 더 작게 (30px) */
+  /*  원 */
   .circle {
     width: 30px;
     height: 30px;
@@ -93,10 +93,10 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
     }
   }
 
-  /* ✅ 점선 위치/길이 조정 */
+  //점선
   .line {
     position: absolute;
-    top: 15px; /* 원 중앙 */
+    top: 15px; //중앙
     left: 100%;
     width: 80px;
     height: 1px;
@@ -114,7 +114,7 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
   }
 }
 
-/* ✅ 모바일: 활성 스텝만 */
+//모바일시 점선 논
 @media (max-width: 768px) {
   .stepper ol {
     justify-content: center;

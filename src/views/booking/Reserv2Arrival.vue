@@ -1,10 +1,10 @@
 <template>
   <div class="form_card" :class="{ open: isOpen }">
-    <!-- ✅ 헤더 클릭 시 열기/닫기 -->
+    <!-- 헤더토글 -->
     <div class="card_header" @click="$emit('toggle')">
       <h3>짐 가져오기</h3>
 
-      <!-- ✅ 모든 입력 완료 시 초록색 체크 표시 -->
+      <!-- 완료시 체크표시 -->
       <i
         v-if="isComplete"
         class="fa-solid fa-check"
@@ -12,7 +12,7 @@
       ></i>
     </div>
 
-    <!-- ✅ 내용 -->
+  
     <transition name="fade">
       <div v-show="isOpen" class="card_content" @click.stop>
         <!-- 픽업 주소 -->
@@ -28,6 +28,7 @@
             />
             <button type="button" class="mini-btn" @click="$emit('openPickup')">
               주소 검색
+               <i class="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
           <p v-if="touched.pickupAddress && errors.pickupAddress" class="error">
@@ -37,7 +38,7 @@
 
         <!-- 상세주소 -->
         <div class="form_group">
-          <label>상세주소*</label>
+          <!-- <label>상세주소*</label> -->
           <input
             type="text"
             placeholder="상세주소를 입력해주세요"
@@ -74,7 +75,7 @@
   </p>
 </div>
 
-        <!-- @@@@@@@@@@@@@@@@추가함 -->
+        <!-- @추가함 -->
        <div class="btn-grup-wrap">
 
          <div class="btn-group">
@@ -105,7 +106,7 @@ const props = defineProps({
   form: { type: Object, required: true },
   isOpen: { type: Boolean, default: true },
   errors: { type: Object, default: () => ({}) },
-  touched: { type: Object, default: () => ({}) }, // ✅ 추가
+  touched: { type: Object, default: () => ({}) }, 
 });
 
 const emit = defineEmits([
@@ -113,7 +114,7 @@ const emit = defineEmits([
   "openPickup",
   "toggle",
   "touch",
-  "move" // ✅ 단일 이동 이벤트
+  "move" //이동 간단하게 수정
 ]);
 
 
@@ -122,7 +123,7 @@ const localForm = computed({
   set: (val) => emit("update:form", val),
 });
 
-// ✅ 모든 입력 완료 시 체크 아이콘 표시
+//입력완료시 체크
 const isComplete = computed(() => {
   const f = props.form;
   return f.pickupAddress && f.pickupAddressDetail && f.pickupDate;
@@ -220,7 +221,7 @@ const isComplete = computed(() => {
     align-items: center;
 
     .mini-btn {
-      width: 100px;
+      width: 120px;
       padding: 8px 12px;
       border-radius: $radius-s;
       background: $color_main;
@@ -448,7 +449,7 @@ const isComplete = computed(() => {
     transition: all 0.25s ease;
   }
 
-  /* 💚 왼쪽 버튼: 메인색 투명도 */
+//회색 왼쪽
   .card-btn.left {
     background: #f5f5f5;
     color: #616161;
@@ -462,10 +463,10 @@ const isComplete = computed(() => {
     }
   }
     
-    /* ⚪ 오른쪽 버튼 */
+  //오른쪽 투명메인
   .card-btn.right {
-    background: rgba(83, 180, 161, 0.15); /* 메인색 15% 투명 */
-    color: #2E7E73;                       /* 본래 메인 텍스트 색 */
+    background: rgba(83, 180, 161, 0.15);
+    color: #2E7E73;                     
     border: 1.5px solid rgba(83, 180, 161, 0.25);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   
@@ -477,7 +478,7 @@ const isComplete = computed(() => {
   }
   }
 
-/* 📱 모바일 대응 */
+
 @media (max-width: 1024px) {
   .btn-group-wrap {
     flex-direction: column;

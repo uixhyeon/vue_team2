@@ -1,8 +1,8 @@
 <template>
-  <!-- ✅ 전체 프레임 -->
+  <!-- 전체 프레임 -->
   <div class="page-frame">
     <div class="change-wrap">
-      <!-- ✅ 상단 영역 -->
+      <!-- 상단 영역 -->
       <header class="header">
         <img src="/images/reservation/Asset2.png" alt="마타주 로고" class="logo" />
         <div class="scr">
@@ -11,7 +11,7 @@
         </div>
       </header>
 
-      <!-- ✅ 본문 -->
+      <!-- 본문 -->
       <main class="content">
         <!-- 예약번호 입력 -->
         <section class="input-section">
@@ -40,7 +40,7 @@
           <button class="btn primary full" @click="goToEdit">예약 수정하기</button>
         </section>
 
-        <!-- ✅ 버튼 기반 안내 -->
+        <!-- 버튼 기반 안내 -->
         <div class="hint">
           <p>예약번호를 모르시나요?</p>
           <button type="button" class="link-btn" @click="openFindModal">
@@ -48,18 +48,25 @@
           </button>
         </div>
       </main>
-
-      <!-- ✅ 예약번호 찾기 모달 -->
-      <FindReservationModal v-if="showModal" @close="showModal = false" />
     </div>
   </div>
+
+  <!-- 예약번호 찾기 모달 (최상위 레벨로 이동) -->
+  <Teleport to="body">
+    <FindReservationModal 
+      v-if="showModal" 
+      @close="closeModal"
+      class="reservation-modal" 
+    />
+  </Teleport>
 </template>
+
 
 <script setup>
 import { ref, getCurrentInstance } from "vue";
-import FindReservationModal from "@/views/sign/FindResarv.vue";
+import FindReservationModal from "@/views/sign/FindReservModal.vue";  // 경로 수정
 
-// ✅ 전역 $alert 접근
+// 전역 $alert 접근
 const { appContext } = getCurrentInstance();
 const $alert = appContext.config.globalProperties.$alert;
 
@@ -67,7 +74,7 @@ const reservationCode = ref("");
 const reservationData = ref(null);
 const showModal = ref(false);
 
-// ✅ 예약번호 조회
+// 예약번호 조회
 const loadReservation = () => {
   if (!reservationCode.value) {
     $alert("예약번호를 입력해주세요.");
@@ -83,24 +90,27 @@ const loadReservation = () => {
   };
 };
 
-// ✅ 예약 수정 이동
+//  예약 수정 이동
 const goToEdit = () => {
   $alert("예약 수정 페이지로 이동합니다!");
   // router.push(`/reservation/edit/${reservationCode.value}`);
 };
 
-// ✅ 모달 열기
+//  모달 제어 함수들
 const openFindModal = () => {
   showModal.value = true;
+  console.log('모달 열림:', showModal.value);
+};
+
+const closeModal = () => {
+  showModal.value = false;
 };
 </script>
 
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 
-/* =========================================================
-   전체 구조
-========================================================= */
+// 전체 구조
 .page-frame {
   display: flex;
   justify-content: center;
@@ -122,10 +132,7 @@ const openFindModal = () => {
   width: 100%;
   max-width: 640px;
 }
-
-/* =========================================================
-   상단 영역
-========================================================= */
+// 상단영역
 .header {
   display: flex;
   align-items: center;
@@ -162,9 +169,7 @@ const openFindModal = () => {
   }
 }
 
-/* =========================================================
-   본문
-========================================================= */
+// 본문
 .content {
   background: #fff;
   width: 100%;
@@ -217,10 +222,7 @@ const openFindModal = () => {
     }
   }
 }
-
-/* =========================================================
-   조회 결과 카드
-========================================================= */
+//조회결과 카드
 .info-card {
   background: #f9fbfb;
   border: 1px solid #e5e8e8;
@@ -269,15 +271,14 @@ const openFindModal = () => {
   }
 }
 
-/* =========================================================
-   하단 안내
-========================================================= */
+//하단 안내
 .hint {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  color: #666;
-
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+  
   p {
     margin-bottom: 6px;
   }
@@ -298,9 +299,7 @@ const openFindModal = () => {
   }
 }
 
-/* =========================================================
-   반응형
-========================================================= */
+// 반응형
 @media (max-width: 768px) {
   .page-frame {
     border-width: 6px;
@@ -339,4 +338,33 @@ const openFindModal = () => {
     padding: 30px 24px;
   }
 }
+
+
+/* 모달 관련 스타일 추가 */
+:deep(.reservation-modal) {
+  z-index: 9999;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: $radius-m;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    position: relative;
+    z-index: 10000;
+  }
+
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+  }
+}
+
 </style>

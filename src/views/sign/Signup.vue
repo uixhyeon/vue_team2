@@ -28,7 +28,7 @@
             </button>
           </div>
           <p class="desc" :style="{ color: phoneError ? '#e53935' : '#999' }">
-            {{ phoneError || '-없이 입력 (예: 01012345678)' }}
+            {{ phoneError || '휴대폰 번호를 입력해주세요 (-제외)' }}
           </p>
         </div>
 
@@ -102,9 +102,7 @@ import { getCurrentInstance } from "vue";
 const { appContext } = getCurrentInstance();
 
 
-/* ===========================
-   1) 전화번호 유효성 검사
-=========================== */
+// 전화번호 유효성
 const phone = ref("");
 const phoneError = ref("");
 const isPhoneValid = ref(false);
@@ -125,19 +123,17 @@ const validatePhone = () => {
   }
 };
 
-/* ===========================
-   2) 인증번호 요청/확인
-=========================== */
-const sentCode = ref("");      // 우리가 보낸(만든) 번호
-const inputCode = ref("");     // 유저가 입력 중인 번호
-const isVerified = ref(false); // 인증 성공 여부
+//인증번호 발송 확인
+const sentCode = ref("");      //만든번호
+const inputCode = ref("");     // 유저 입력 번호
+const isVerified = ref(false); // 인증 ox
 
 const generateCode = () => {
   // 6자리 랜덤
   const randomCode = Math.floor(Math.random() * 900000) + 100000;
   sentCode.value = randomCode.toString();
   inputCode.value = sentCode.value; // 자동입력
-  isVerified.value = false; // 새로 보냈으면 다시 인증 필요
+  isVerified.value = false; // 새로 보냈으면 다시 인증
  appContext.config.globalProperties.$alert("인증번호가 발송되었습니다.");
 
 };
@@ -156,9 +152,7 @@ const verifyCode = () => {
   }
 };
 
-/* ===========================
-   3) 약관
-=========================== */
+// 이용약관
 const terms = ref([
   { label: "[필수] 만 14세 이상입니다.", checked: false, required: true },
   { label: "[필수] 서비스 이용약관 동의 (보기)", checked: false, required: true },
@@ -189,15 +183,10 @@ watch(
   { deep: true, immediate: true }
 );
 
-/* ===========================
-   4) 버튼 활성화 조건
-   ▶ 인증 성공 + 필수약관 ok
-=========================== */
+//인증성공 필수체크해야
 const canSubmit = computed(() => isVerified.value && requiredAllChecked.value);
 
-/* ===========================
-   5) 제출
-=========================== */
+//서브밋
 const onSubmit = () => {
   if (!canSubmit.value) {
   
@@ -215,19 +204,19 @@ const onSubmit = () => {
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 
-/* ✅ 전체 페이지 구조 */
+//전체구조
 .join-page {
-  min-height: 100vh;
+  // min-height: 100vh;
   background: #f5f7f7;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   z-index: 0;
-  padding-bottom: 3rem;
+  padding-bottom: 100px;
 }
 
-/* ✅ 상단 헤더 */
+//상단
 .header {
   height: 200px;
   position: relative;
@@ -250,7 +239,6 @@ const onSubmit = () => {
     position: absolute;
     top: 50%;
     transform: translateY(-50%) rotate(45deg);
-    // background: rgba(255, 255, 255, 0.4);
     color: transparent;
     width: 70px;
     height: 70px;
@@ -266,12 +254,11 @@ const onSubmit = () => {
 
     &.right {
       right: 80px;
-      // background: rgba(255, 255, 255, 0.6);
     }
   }
 }
 
-/* ✅ 회원가입 카드 */
+//회원가입카드 
 .join-card {
   background: #fff;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
@@ -280,7 +267,7 @@ const onSubmit = () => {
   width: 500px;
   position: relative;
   z-index: 10;
-  margin-top: -60px;
+  margin-top: -60px; //곂쳐지게
 
   form {
     position: relative;
@@ -288,7 +275,7 @@ const onSubmit = () => {
   }
 }
 
-/* ✅ 라인형 입력 폼 */
+//라인형 입력
 .form_group {
   margin-bottom: 25px;
 
@@ -332,7 +319,7 @@ const onSubmit = () => {
   }
 }
 
-/* ✅ 새로운 입력 구조 (.form-group: 복수행 대응) */
+//입력구조 보충
 .form-group {
   margin-bottom: 25px;
 
@@ -369,7 +356,7 @@ const onSubmit = () => {
   }
 }
 
-/* ✅ 약관 영역 */
+//약관
 .terms {
   border-top: 1px solid #e7e7e7;
   padding-top: 15px;
@@ -400,7 +387,7 @@ const onSubmit = () => {
   }
 }
 
-/* ✅ 버튼 */
+//버튼
 .btn {
   background: $color_main;
   color: #fff;
@@ -427,7 +414,7 @@ const onSubmit = () => {
   }
 }
 
-/* ✅ 반응형 */
+//반응형
 @media (max-width: 600px) {
   .join-card {
     width: 90%;
@@ -438,8 +425,7 @@ const onSubmit = () => {
   }
 }
 
-// 추가
-/* ✅ 이용동의 버튼 활성화/비활성화 시 색상 구분 */
+//이용동의 활성화 비활성화
 .btn.primary.full {
   background: $color_main; // 활성화 기본색
   color: #fff;

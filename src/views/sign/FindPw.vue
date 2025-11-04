@@ -104,11 +104,11 @@ const codeSent = ref(false);
 const verified = ref(false);
 const resetComplete = ref(false);
 
-// ✅ 전역 $alert 함수 접근
+// 전역 $alert 함수 접근
 const { appContext } = getCurrentInstance();
 const $alert = appContext.config.globalProperties.$alert;
 
-// ✅ 인증번호 발송
+// 인증번호 발송
 const sendCode = () => {
   if (!userId.value || !phone.value) {
     $alert("아이디와 휴대폰 번호를 모두 입력해주세요.");
@@ -118,7 +118,7 @@ const sendCode = () => {
   codeSent.value = true;
 };
 
-// ✅ 인증번호 확인
+// 인증번호 확인
 const verify = () => {
   if (verifyCode.value === "1234") {
     verified.value = true;
@@ -128,7 +128,7 @@ const verify = () => {
   }
 };
 
-// ✅ 비밀번호 변경
+// 비밀번호 변경
 const resetPassword = () => {
   if (!newPassword.value || !confirmPassword.value) {
     $alert("비밀번호를 입력해주세요.");
@@ -143,7 +143,7 @@ const resetPassword = () => {
   $alert("비밀번호가 성공적으로 변경되었습니다 🎉");
 };
 
-// ✅ 모달 닫기
+// 모달 닫기
 const closeModal = () => {
   emit("close");
 };
@@ -152,7 +152,7 @@ const closeModal = () => {
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 
-/* ✅ 모달 배경 */
+//배경
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -163,7 +163,7 @@ const closeModal = () => {
   z-index: 2000;
 }
 
-/* ✅ 모달 박스 */
+//박스
 .modal-box {
   background: #fff;
   width: 420px;
@@ -184,7 +184,7 @@ const closeModal = () => {
   }
 }
 
-/* ✅ 헤더 */
+//헤더
 .modal-header {
   background: $color_main;
   color: #fff;
@@ -207,7 +207,7 @@ const closeModal = () => {
   }
 }
 
-/* ✅ 본문 */
+//본문
 .modal-body {
   padding: 24px 28px;
 
@@ -256,14 +256,14 @@ const closeModal = () => {
   }
 }
 
-/* ✅ 푸터 */
+
 .modal-footer {
   padding: 20px;
   border-top: 1px solid #eee;
   text-align: center;
 }
 
-/* ✅ 버튼 */
+
 .btn {
   background: $color_main;
   color: #fff;

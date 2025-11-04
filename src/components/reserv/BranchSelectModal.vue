@@ -50,13 +50,9 @@
   </div>
 </div>
 
-
-
-
-
           </div>
 
-          <!-- 오른쪽: 지도 -->
+          <!-- 오른쪽 지도 -->
           <div class="map-section-large">
             <div ref="modalMapEl" class="modal-map-large">
               <!-- 기본 지도 내용 -->
@@ -128,7 +124,7 @@ const mapReady = ref(false)
 
 let map, marker, geocoder;
 
-/* 카카오맵 스크립트 로드 */
+/* 카카오맵 스크립트 가져오기*/
 async function loadKakaoMapScript() {
   if (window.kakao && window.kakao.maps) return;
   const key = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
@@ -140,7 +136,7 @@ async function loadKakaoMapScript() {
   });
 }
 
-/* 지도 mount */
+/* 지도 마운트 */
 async function mountMap() {
   await loadKakaoMapScript();
   const center = new window.kakao.maps.LatLng(35.8714, 128.6014);
@@ -161,7 +157,7 @@ function moveMapTo(location) {
 
   let searchAddress = location.address;
 
-  // ✅ 주소 자동 보정
+  // 주소 자동 보정
 if (!/광역시|특별자치도|도/.test(searchAddress)) {
   if (location.region?.includes("부산")) searchAddress = "부산광역시 " + searchAddress;
   else if (location.region?.includes("강릉") || location.region?.includes("속초"))
@@ -173,7 +169,7 @@ if (!/광역시|특별자치도|도/.test(searchAddress)) {
 }
 
 
-  // ✅ 오사카 예외
+  // 오사카 예외
   if (location.region === "오사카") {
     const latlng = new window.kakao.maps.LatLng(34.6695, 135.5008);
     map.setCenter(latlng);
@@ -182,7 +178,7 @@ if (!/광역시|특별자치도|도/.test(searchAddress)) {
     return;
   }
 
-  // ✅ 주소 검색
+  // 주소 검색
   geocoder.addressSearch(searchAddress, (results, status) => {
     if (status === window.kakao.maps.services.Status.OK && results.length > 0) {
       const { x, y } = results[0];
@@ -190,9 +186,9 @@ if (!/광역시|특별자치도|도/.test(searchAddress)) {
       map.setCenter(latlng);
       marker.setPosition(latlng);
       marker.setMap(map);
-      console.log("✅ 지도 이동 완료:", searchAddress);
+      console.log("지도 이동 완료:", searchAddress);
     } else {
-      console.warn("❌ 주소 검색 실패:", searchAddress, status);
+      console.warn("주소 검색 실패:", searchAddress, status);
     }
   });
 }
@@ -207,7 +203,7 @@ async function selectLocation(location) {
     g.branches.some((b) => b.id === location.id)
   );
 
-  // ✅ region을 확실히 포함
+  // region을 확실히 포함
   const locWithRegion = { ...location, region: regionGroup?.region || "" };
   
   if (!locWithRegion.region && location.region) {
@@ -221,15 +217,15 @@ async function selectLocation(location) {
   // 지도 준비될 때까지 대기
   let tries = 0;
   while (!mapReady.value && tries < 10) {
-    console.log("⏳ 지도 준비 대기중...");
+    console.log("⏳ 지도가 준비 중...");
     await new Promise((r) => setTimeout(r, 200));
     tries++;
   }
 
   if (mapReady.value && locWithRegion.address) {
-    moveMapTo(locWithRegion); // ✅ region 포함된 객체로 이동
+    moveMapTo(locWithRegion); // region 포함된 객체로 이동
   } else {
-    console.warn("⚠️ 지도 미완성 상태, 이동 실패");
+    console.warn("⚠️ 지도 미완성으로 이동 실패");
   }
 }
 
@@ -264,7 +260,7 @@ watch(
 
 setTimeout(() => {
   window.kakao.maps.event.trigger(map, "resize");
-  window.dispatchEvent(new Event("resize")); // ✅ Safari 보완
+  window.dispatchEvent(new Event("resize")); // Safari 보완
   if (selectedLocation.value?.address) {
     moveMapTo(selectedLocation.value);
   }
