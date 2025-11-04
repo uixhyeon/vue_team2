@@ -3,7 +3,7 @@
     <Stepper :current-step="2" />
 
     <div class="content">
-      <!-- 왼쪽: 정보 + 요약 -->
+      <!-- 왼쪽 요약-->
       <section class="left-section">
         <!-- 정보 카드 -->
         <div class="form_card">
@@ -20,17 +20,17 @@
 </tr>
 
 
-    <!-- ✅ 짐 가져오기 -->
+    <!-- 짐 가져오기 -->
     <tr v-if="form.pickupAddress"><td>픽업 주소</td><td>{{ form.pickupAddress }}</td></tr>
     <tr v-if="form.pickupAddressDetail"><td>픽업 상세주소</td><td>{{ form.pickupAddressDetail }}</td></tr>
     <tr v-if="form.pickupDate"><td>픽업일</td><td>{{ formatDate(form.pickupDate) }}</td></tr>
 
-    <!-- ✅ 집으로 보내기 -->
+    <!-- 집으로 보내기 -->
     <tr v-if="form.homeAddress"><td>배송 주소</td><td>{{ form.homeAddress }}</td></tr>
     <tr v-if="form.homeAddressDetail"><td>배송 상세주소</td><td>{{ form.homeAddressDetail }}</td></tr>
     <tr v-if="form.deliveryDate"><td>배송일</td><td>{{ formatDate(form.deliveryDate) }}</td></tr>
 
-    <!-- ✅ 결제금액 -->
+    <!-- 결제금액 -->
     <tr class="total" v-if="totalPrice > 0">
       <td>결제금액</td><td><strong>{{ formatKrw(totalPrice) }}</strong></td>
     </tr>
@@ -115,7 +115,7 @@ const route = useRoute();
 
 
 
-// ✅ form 데이터 복원
+// form 데이터 복원
 const form = ref(
   route.query.form
     ? (() => {
@@ -133,7 +133,7 @@ const form = ref(
     : {}
 );
 
-// ✅ 날짜 포맷 함수
+// 날짜 포맷 함수
 const formatDate = (date) => {
   if (!date) return "";
   const d = new Date(date);
@@ -144,7 +144,7 @@ const formatDate = (date) => {
   return `${y}-${m}-${day}`;
 };
 
-// ✅ 기본 요금
+// 기본 요금
 const baseTotal = ref(Number(route.query.totalPrice || 0));
 
 const selectedTabs = ref(["사물함 예약"]);
@@ -154,7 +154,7 @@ const prices = {
   "집으로 배송하기": 20000,
 };
 
-// ✅ 쿠폰/포인트
+// 쿠폰앤포인트
 const useCoupon = ref(false);
 const usePoints = ref(false);
 
@@ -173,7 +173,7 @@ const finalTotal = computed(() =>
   Math.max(totalPrice.value - discountAmount.value, 0)
 );
 
-// ✅ 결제 수단
+// 결제 수단
 const selectedPayment = ref("card");
 const paymentMethods = [
   { id: "card", label: "신용카드", img: "/images/reservation/image490.png" },
@@ -182,23 +182,24 @@ const paymentMethods = [
   { id: "bank", label: "무통장입금", img: "/images/reservation/image492.png" },
 ];
 
-// ✅ 금액 포맷 함수
+// 금액 포맷 함수
 const formatKrw = (v) =>
   new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW" }).format(v);
 
 // ===================================================
 // ✅ 결제 완료 모달 제어
-// ===================================================
-// ✅ 모달 표시 여부
+
+
+//결제완료 모달
 const showFinish = ref(false);
 const orderId = ref(`MATAJU-${Date.now().toString().slice(-6)}`);
 
-// ✅ 결제 버튼 클릭 시 모달 표시
+// 버튼 후 모달 표시
 const saveAndPay = () => {
   showFinish.value = true;
 };
 
-// ✅ 모달 닫기 후 Reservation3으로 이동
+// 예약3로 열림
 function closeFinish() {
   showFinish.value = false;
   
@@ -223,10 +224,10 @@ function goHome() {
 
 <style lang="scss" scoped>
 @use "/src/assets/style/variables" as *;
-@use "/src/assets/style/_reservation" as *;
 
 
-/* ✅ 기본 구조 */
+
+//베이스
 .reserve-page {
   background: #f5f7f7;
   min-height: 100vh;
@@ -240,7 +241,7 @@ padding: 40px 0 80px 0;
   width: 100%;
   max-width: 1120px;
   display: grid;
-  grid-template-rows: 1fr 1fr; /* ✅ 기본은 2:1 비율 가로 정렬 */
+  grid-template-rows: 1fr 1fr; 
   gap: 2.5rem;
   align-items: start;
   padding: 20px;
@@ -249,7 +250,7 @@ padding: 40px 0 80px 0;
   
 
   @media (max-width: 1024px) {
-    grid-template-columns: 1fr; /* ✅ 세로 정렬로 전환 */
+    grid-template-columns: 1fr; //세로로
     gap: 2rem;
   }
 
@@ -266,7 +267,7 @@ padding: 40px 0 80px 0;
 
   @media (max-width: 1024px) {
     width: 100%;
-    align-items: stretch; /* ✅ 세로 전체 폭으로 확장 */
+    align-items: stretch;  //폭 확장
   }
 }
 
@@ -283,7 +284,7 @@ gap: 2.5rem;
 .payment_card{
   width: 100%;
 }
-/* ✅ 공통 카드 스타일 */
+//공통카드 스타일
 .form_card,
 .summary_card,
 .payment_card {
@@ -324,7 +325,8 @@ gap: 2.5rem;
 .summary_card{
   height: fit-content;
 }
-/* ✅ 테이블 */
+
+//태이블
 .form_card table {
   width: 100%;
   border-collapse: collapse;
@@ -348,7 +350,7 @@ gap: 2.5rem;
   }
 }
 
-/* ✅ 요약 카드 */
+//요약카드
 .summary_card {
   h2{
     font-size: $text-md;
@@ -410,7 +412,7 @@ gap: 2.5rem;
   }
 }
 
-/* ✅ 결제 카드 */
+//결제카드
 .payment_card {
   button{
     font-size: $text-md;
@@ -489,7 +491,7 @@ color: #444444;
   }
 }
 
-/* ✅ 결제 버튼 */
+//결제버튼
 .submit_btn {
   width: 50%;
   padding: 14px 0;

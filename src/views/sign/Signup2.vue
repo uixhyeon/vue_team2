@@ -12,7 +12,7 @@
 
     <div class="join-card">
       <form @submit="submitForm">
-        <!-- ✅ 이메일 (도메인 선택형) -->
+        <!-- 이메일 -->
         <div class="form_group">
           <label>이메일 아이디*</label>
           <div class="email-row">
@@ -41,11 +41,11 @@
             class="custom-domain"
           />
           <p class="label" :style="{ color: errors.email ? '#e53935' : '#888' }">
-            {{ errors.email || '회원가입 후 메일 인증이 필요합니다' }}
+            {{ errors.email || '' }}
           </p>
         </div>
 
-        <!-- ✅ 비밀번호 -->
+        <!-- 비밀번호 -->
         <div class="form_group">
           <label>비밀번호*</label>
           <input
@@ -55,11 +55,11 @@
             @blur="validatePassword"
           />
           <p class="label" :style="{ color: errors.password ? '#e53935' : '#888' }">
-            {{ errors.password || '8자 이상 입력해주세요' }}
+            {{ errors.password || '' }}
           </p>
         </div>
 
-        <!-- ✅ 비밀번호 확인 -->
+        <!-- 비밀번호 확인 -->
         <div class="form_group">
           <label>비밀번호 확인*</label>
           <input
@@ -69,15 +69,15 @@
             @blur="validateConfirm"
           />
           <p class="label" :style="{ color: errors.confirm ? '#e53935' : '#888' }">
-            {{ errors.confirm || '비밀번호 일치 여부 확인' }}
+            {{ errors.confirm || '' }}
           </p>
         </div>
 
-        <!-- ✅ 선택 입력 정보 -->
+        <!-- 선택 입력 정보 -->
         <div class="title-wrap"><h2>선택입력 정보</h2></div>
 
         <div class="form_group">
-          <label>성함*</label>
+          <label>성함</label>
           <input
             type="text"
             placeholder="성함을 입력해주세요"
@@ -85,13 +85,13 @@
             @blur="validateName"
           />
           <p class="label" :style="{ color: errors.name ? '#e53935' : '#888' }">
-            {{ errors.name || '2~10자 이내로 입력해주세요' }}
+            {{ errors.name || '' }}
           </p>
         </div>
 
-       <!-- ✅ 주소 (카카오 주소검색 연결) -->
+       <!-- 주소 (카카오 주소검색 연결) -->
 <div class="form_group">
-  <label>주소*</label>
+  <label>주소</label>
 
   <div class="address-row">
     <input
@@ -102,18 +102,18 @@
       @blur="validateAddress"
     />
     <button type="button" class="btn search" @click="searchAddress">
-      <i class="fa-solid fa-magnifying-glass"></i>
       <span>주소 검색</span>
+      <i class="fa-solid fa-magnifying-glass"></i>
     </button>
   </div>
 
   <p class="label" :style="{ color: errors.address ? '#e53935' : '#888' }">
-    {{ errors.address || '검색 버튼을 눌러 주소를 선택하세요' }}
+    {{ errors.address || '' }}
   </p>
 
   <div class="gapp"></div>
 
-  <input
+  <input style="padding-top:20px ;"
     type="text"
     placeholder="상세주소를 입력해주세요"
     v-model="form.detail"
@@ -137,9 +137,7 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const { appContext } = getCurrentInstance();
 
-/* ======================
-  이메일 도메인 선택형
-====================== */
+//이메일 
 const emailId = ref("");
 const emailDomain = ref("");
 const customDomain = ref("");
@@ -153,9 +151,7 @@ const handleDomainChange = () => {
   if (emailDomain.value !== "custom") customDomain.value = "";
 };
 
-/* ======================
-  나머지 입력
-====================== */
+//입력들
 const form = ref({
   password: "",
   confirm: "",
@@ -172,9 +168,7 @@ const errors = ref({
   address: "",
 });
 
-/* -----------------------------------------------------
-   🧭 카카오 주소검색 연결
------------------------------------------------------ */
+//카카오 주소검색모달으로 
 onMounted(() => {
   // ✅ 카카오 주소검색 스크립트가 없을 경우 로드
   if (!window.daum || !window.daum.Postcode) {
@@ -198,14 +192,12 @@ function searchAddress() {
   }).open();
 }
 
-/* ======================
-  유효성 검사
-====================== */
+//유효성 검사
 const validateEmail = () => {
   const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   errors.value.email = pattern.test(fullEmail.value)
     ? ""
-    : "올바른 이메일 형식이 아닙니다.";
+    : "올바른 이메일이 아닙니다.";
 };
 
 const validatePassword = () => {
@@ -233,9 +225,7 @@ const validateAddress = () => {
   errors.value.address = form.value.address ? "" : "주소를 입력해주세요.";
 };
 
-/* ======================
-  전체 유효성 확인
-====================== */
+//유효성
 const isFormValid = computed(() =>
   Object.values(errors.value).every((v) => v === "") &&
   fullEmail.value &&
@@ -245,9 +235,7 @@ const isFormValid = computed(() =>
   form.value.address
 );
 
-/* ======================
-  제출
-====================== */
+//제출
 const submitForm = (e) => {
   e.preventDefault();
   validateEmail();
@@ -274,12 +262,12 @@ const submitForm = (e) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 0 3rem; /* ✅ 상단 여백 추가 */
+  padding: 60px 0 3rem;
   position: relative;
   z-index: 1;
 }
 
-/* ✅ 헤더 */
+
 .header {
   position: relative;
   height: 180px;
@@ -322,19 +310,21 @@ const submitForm = (e) => {
   }
 }
 
-/* ✅ 카드 (헤더에 묻히지 않게 조정) */
+
 .join-card {
   background: #fff;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
   padding: 50px 60px;
   width: 500px;
-  margin-top: 40px; /* ✅ 기존 -60px → +40px으로 수정 */
-  border-radius: $radius-m; /* ✅ 더 자연스러운 카드형 */
   position: relative;
-  z-index: 3; /* ✅ 배경보다 위에 */
+  z-index: 3; 
+  margin-top: -60px;  
+
+
+ 
 }
 
-/* ✅ 이메일 입력 커스텀 */
+//이메일
 .email-row {
   display: flex;
   align-items: center;
@@ -381,7 +371,7 @@ const submitForm = (e) => {
   }
 }
 
-/* ✅ 공통 입력폼 */
+//공통
 .form_group {
   margin-bottom: 25px;
   label {
@@ -412,22 +402,24 @@ const submitForm = (e) => {
   }
 }
 
-/* ✅ 구분선 */
+
 .title-wrap {
   display: flex;
   flex-direction: column;
   gap: 2px;
   margin: 30px 0 15px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e7e7e7;
+  padding-bottom: 4px;
+  
+
   h2 {
-    font-size: 16px;
+    padding-top: 10px;
+    font-size: 17px;
     font-weight: 700;
     color: #333;
   }
 }
 
-/* ✅ 버튼 */
+
 .btn {
   background: $color_main;
   color: #fff;
@@ -540,7 +532,6 @@ const submitForm = (e) => {
 
 //===================추가함======
 
-/* ✅ 전체 페이지 */
 .join-page {
   min-height: 100vh;
   background: #f5f7f7;
@@ -552,7 +543,6 @@ const submitForm = (e) => {
   padding-bottom: 4rem;
 }
 
-/* ✅ 상단 헤더 (브랜드 영역) */
 .header {
   position: relative;
   width: 100%;
@@ -596,19 +586,7 @@ const submitForm = (e) => {
   }
 }
 
-/* ✅ 회원가입 카드 */
-.join-card {
-  background: #fff;
-  width: 500px;
-  padding: 50px 60px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-  border-radius: $radius-m;
-  margin-top: 40px; /* ✅ 기존 -60px → 양수 40px */
-  z-index: 5;
-  position: relative;
-}
 
-/* ✅ 입력 그룹 (공통 스타일) */
 .form-group {
   margin-bottom: 25px;
 
@@ -648,7 +626,6 @@ const submitForm = (e) => {
   }
 }
 
-/* ✅ 약관 영역 */
 .terms {
   border-top: 1px solid #e7e7e7;
   padding-top: 15px;
@@ -683,12 +660,11 @@ const submitForm = (e) => {
   }
 }
 
-/* ✅ 버튼 스타일 */
 .btn {
   background: $color_main;
   color: #fff;
   border: none;
-  border-radius: $radius-s;
+  // border-radius: $radius-s;
   cursor: pointer;
   font-weight: 600;
   padding: 12px 16px;
@@ -717,7 +693,6 @@ const submitForm = (e) => {
   }
 }
 
-/* ✅ 반응형 (모바일 대응) */
 @media (max-width: 600px) {
   .join-card {
     width: 90%;
@@ -730,7 +705,7 @@ const submitForm = (e) => {
     padding: 40px 0;
 
     .logo {
-      display: none; /* 작은 화면에서는 장식 로고 숨김 */
+      display: none; 
     }
 
     h1 {

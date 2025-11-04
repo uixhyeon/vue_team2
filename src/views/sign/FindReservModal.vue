@@ -43,7 +43,7 @@ const name = ref("");
 const phone = ref("");
 const foundCode = ref("");
 
-// ✅ 전역 $alert 접근 (Composition API 방식)
+//  전역 $alert 접근 (Composition API 방식)
 const { appContext } = getCurrentInstance();
 const $alert = appContext.config.globalProperties.$alert;
 
@@ -66,7 +66,7 @@ const close = () => {
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 
-/* ✅ 모달 배경 */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -77,7 +77,7 @@ const close = () => {
   z-index: 2000;
 }
 
-/* ✅ 모달 박스 */
+
 .modal-box {
   background: #fff;
   width: 400px;
@@ -98,7 +98,7 @@ const close = () => {
   }
 }
 
-/* ✅ 헤더 */
+
 .modal-header {
   background: $color_main;
   color: #fff;
@@ -121,7 +121,7 @@ const close = () => {
   }
 }
 
-/* ✅ 본문 */
+
 .modal-body {
   padding: 24px 28px;
 

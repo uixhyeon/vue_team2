@@ -88,7 +88,7 @@ const handleAgree = () => {
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 
-/* 💚 이용약관 모달 */
+//이용약관 모달
 .terms-overlay {
   position: fixed;
   inset: 0;
@@ -176,7 +176,7 @@ const handleAgree = () => {
   }
 }
 
-/* ✅ 모달 페이드 애니메이션 */
+//페이드
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.25s;

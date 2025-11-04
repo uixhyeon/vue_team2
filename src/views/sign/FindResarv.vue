@@ -1,11 +1,11 @@
 <template>
   <div class="check-page">
-    <!-- ✅ 상단 로고 -->
+    <!-- 상단 로고 -->
     <header class="header">
       <img src="/public/images/mains/header/logo-1.png" alt="마타주 로고" class="logo" />
     </header>
 
-    <!-- ✅ 중앙 카드 -->
+    <!-- 중앙 카드 -->
     <main class="check-card">
       <h1>예약 확인</h1>
       <p class="desc">예약번호를 입력해주세요!</p>
@@ -27,11 +27,12 @@
           예약번호 찾기
         </button>
         <p>|</p>
-        <RouterLink to="/changereserv">예약 변경하기</RouterLink>
+        <RouterLink class="link-btn" to="/changereserv">예약 변경하기</RouterLink>
+    
       </div>
     </main>
 
-    <!-- ✅ 예약번호 찾기 모달 -->
+    <!-- 예약번호 찾기 모달 -->
     <FindReservationModal v-if="showModal" @close="showModal = false" />
   </div>
 </template>
@@ -41,7 +42,7 @@ import { ref, getCurrentInstance } from "vue";
 import { RouterLink } from "vue-router";
 import FindReservationModal from "@/views/sign/FindReservModal.vue";
 
-// ✅ 전역 $alert 접근
+// 전역 $alert 접근
 const { appContext } = getCurrentInstance();
 const $alert = appContext.config.globalProperties.$alert;
 
@@ -58,7 +59,7 @@ const checkReservation = () => {
   $alert(`예약번호 ${reservationCode.value} 확인 중...`);
 };
 
-// ✅ 모달 열기
+// 모달 열기
 const openFindModal = () => {
   showModal.value = true;
 };
@@ -68,15 +69,16 @@ const openFindModal = () => {
 @use "/src/assets/style/variables" as *;
 
 .check-page {
+      padding: 80px 0 100px;
   background: #f5f7f7;
-  min-height: 100vh;
+  // min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 100px;
+
 }
 
-/* ✅ 상단 로고 */
+
 .header {
   margin-bottom: 20px;
 
@@ -86,7 +88,7 @@ const openFindModal = () => {
   }
 }
 
-/* ✅ 메인 카드 */
+
 .check-card {
   background: #fff;
   width: 440px;
@@ -153,7 +155,7 @@ const openFindModal = () => {
       margin: 0;
     }
 
-    /* ✅ 버튼형 링크 */
+    //버튼링크
     .link-btn {
       background: none;
       border: none;
@@ -162,10 +164,12 @@ const openFindModal = () => {
       font-size: 14px;
       cursor: pointer;
       padding: 0;
+     
 
       &:hover {
         color: $color_main;
       }
+    
     }
 
     .router-link-active {

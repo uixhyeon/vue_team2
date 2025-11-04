@@ -1,50 +1,47 @@
 <template>
   <div class="wrap">
- <Stepper :current-step="currentStep" />
-
+    <Stepper :current-step="currentStep" />
 
     <!-- ✅ 통일된 배경/레이아웃 -->
     <div class="background inner">
       <div class="container">
         <!-- 왼쪽 입력 카드들 -->
-    <div class="left">
-  <!-- ① 사물함 예약 -->
-<Reserv1Locker
-  v-model:form="form"
-  :isOpen="openSection === 'locker'"
-  :errors="errors"
-  :touched="touched"
-  @toggle="toggleSection('locker')"
-  @openBranch="handleOpenBranch"
-  @touch="handleTouch"
-  @move="handleMove"
-/>
+        <div class="left">
+          <!-- ① 사물함 예약 -->
+          <Reserv1Locker
+            v-model:form="form"
+            :isOpen="openSection === 'locker'"
+            :errors="errors"
+            :touched="touched"
+            @toggle="toggleSection('locker')"
+            @openBranch="handleOpenBranch"
+            @touch="handleTouch"
+            @move="handleMove"
+          />
 
-<!-- ② 짐 가져오기 -->
-<Reserv2Arrival
-  v-model:form="form"
-  :isOpen="openSection === 'arrival'"
-  :errors="errors"
-  :touched="touched"
-  @toggle="toggleSection('arrival')"
-  @openPickup="openPickupAddr = true"
-  @touch="handleTouch"
-  @move="handleMove"
-/>
+          <!-- ② 짐 가져오기 -->
+          <Reserv2Arrival
+            v-model:form="form"
+            :isOpen="openSection === 'arrival'"
+            :errors="errors"
+            :touched="touched"
+            @toggle="toggleSection('arrival')"
+            @openPickup="openPickupAddr = true"
+            @touch="handleTouch"
+            @move="handleMove"
+          />
 
-<!-- ③ 집으로 보내기 -->
-<Reserv3Luggage
-  v-model:form="form"
-  :isOpen="openSection === 'luggage'"
-  :errors="errors"
-  :touched="touched"
-  @toggle="toggleSection('luggage')"
-  @openHome="openHomeAddr = true"
-  @move="handleMove"
-/>
-
-
-</div>
+          <!-- ③ 집으로 보내기 -->
+          <Reserv3Luggage
+            v-model:form="form"
+            :isOpen="openSection === 'luggage'"
+            :errors="errors"
+            :touched="touched"
+            @toggle="toggleSection('luggage')"
+            @openHome="openHomeAddr = true"
+            @move="handleMove"
+          />
+        </div>
 
         <!-- 오른쪽 요약 카드 -->
         <div class="right">
@@ -62,11 +59,9 @@
           <!-- ✅ 입력 완료 버튼 -->
           <button class="submit_btn" @click="handleSubmit">입력 완료</button>
         </div>
-      <button class="mobile-submit" @click="handleMobileComplete">
-  입력 완료
-</button>
+        <button class="mobile-submit" @click="handleMobileComplete">입력 완료</button>
+      </div>
     </div>
-</div>
     <!-- ===== 모달들 ===== -->
     <BranchSelectModal
       :open="showBranchModal"
@@ -91,34 +86,23 @@
 
     <!-- 💚 MatAju 전역 알림창 -->
     <!-- 💚 AlertModal (body로 이동됨, 렌더 순서 영향 없음) -->
-<AlertModal
-  :show="showAlert"
-  :message="alertMessage"
-  @close="showAlert = false"
-/>
+    <AlertModal :show="showAlert" :message="alertMessage" @close="showAlert = false" />
     <!-- 컨팜모달 -->
-<ConfirmReserv
-  v-if="showConfirm && isTabletOrBelow"
-  :form="form"
-  :total-price="totalPrice"
-  @close="showConfirm = false"
-  @submit="handleConfirmSubmit"
-/>
-<!--약관동의 -->
-<ReasrAgree
-  :show="showTerms"
-  @close="showTerms = false"
-  @agree="handleAgreeTerms"
-/>
-
-
+    <ConfirmReserv
+      v-if="showConfirm && isTabletOrBelow"
+      :form="form"
+      :total-price="totalPrice"
+      @close="showConfirm = false"
+      @submit="handleConfirmSubmit"
+    />
+    <!--약관동의 -->
+    <ReasrAgree :show="showTerms" @close="showTerms = false" @agree="handleAgreeTerms" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
-
 
 import Stepper from "@/components/reserv/Stepper.vue";
 import ReasrAgree from "@/components/reserv/ReserAgree.vue";
@@ -131,11 +115,9 @@ import BranchSelectModal from "@/components/reserv/BranchSelectModal.vue";
 import AddressPicker from "@/components/reserv/AddressPicker.vue";
 import ConfirmReserv from "@/components/reserv/ConfirmReserv.vue";
 
-
 // 💚 추가된 전역 알림창 상태
 const showAlert = ref(false);
 const alertMessage = ref("");
-
 
 // 약관동의
 const showTerms = ref(false);
@@ -158,22 +140,8 @@ function handleAgreeTerms() {
   }, 1200);
 }
 
-
-// 스탭퍼
-
-const currentStep = computed(() => {
-  switch (openSection.value) {
-    case "locker":
-      return 1; // ① 사물함 예약
-    case "arrival":
-      return 2; // ② 짐 가져오기
-    case "luggage":
-      return 3; // ③ 집으로 보내기
-    default:
-      return 1;
-  }
-});
-
+// 스텝퍼 - 항상 1단계 유지
+const currentStep = computed(() => 1);
 
 // 📍 지역별 지점 리스트
 const locations = [
@@ -293,8 +261,6 @@ const locations = [
   },
 ];
 
-
-
 // ✅ 공통 폼 상태
 const form = ref({
   name: "",
@@ -319,21 +285,10 @@ const prices = {
   XXL: { locker: 28000, delivery: 32000 },
 };
 
-
-
-
 // ✅ 완료 상태
 const lockerComplete = computed(() => {
   const f = form.value;
-  return (
-    f.name &&
-    f.phone &&
-    f.size &&
-    f.address &&
-    f.dateRange &&
-    f.dateRange[0] &&
-    f.dateRange[1]
-  );
+  return f.name && f.phone && f.size && f.address && f.dateRange && f.dateRange[0] && f.dateRange[1];
 });
 
 // ✅ 열기/닫기
@@ -389,7 +344,6 @@ function handleConfirmSubmit() {
   handleSubmit();
 }
 
-
 // ✅ 완료 체크
 const arrivalComplete = computed(() => {
   const f = form.value;
@@ -403,9 +357,17 @@ const luggageComplete = computed(() => {
 // ✅ 에러 상태
 const errors = ref({});
 const touched = ref({
-  name: false, phone: false, size: false, address: false, dateRange: false,
-  pickupAddress: false, pickupAddressDetail: false, pickupDate: false,
-  homeAddress: false, homeAddressDetail: false, deliveryDate: false,
+  name: false,
+  phone: false,
+  size: false,
+  address: false,
+  dateRange: false,
+  pickupAddress: false,
+  pickupAddressDetail: false,
+  pickupDate: false,
+  homeAddress: false,
+  homeAddressDetail: false,
+  deliveryDate: false,
 });
 
 function handleTouch(field) {
@@ -417,16 +379,11 @@ const validateForm = () => {
   const f = form.value;
   const err = {};
   if (!f.name?.trim()) err.name = "이름을 입력해주세요";
-  if (!f.phone || !/^(010|011|016|017|018|019)\d{7,8}$/.test(f.phone))
-    err.phone = "휴대폰 번호를 입력해주세요 (-제외)";
+  if (!f.phone || !/^(010|011|016|017|018|019)\d{7,8}$/.test(f.phone)) err.phone = "휴대폰 번호를 입력해주세요 (-제외)";
   if (!f.size) err.size = "사물함 사이즈를 선택해주세요";
   if (!f.address) err.address = "대여 장소를 선택해주세요";
-if (
-  !f.dateRange ||
-  f.dateRange.length < 2 ||
-  f.dateRange[0] === f.dateRange[1]
-)
-  err.dateRange = "시작일과 종료일이 같을 수 없습니다.";
+  if (!f.dateRange || f.dateRange.length < 2 || f.dateRange[0] === f.dateRange[1])
+    err.dateRange = "시작일과 종료일이 같을 수 없습니다.";
 
   if (f.pickupAddress || f.pickupAddressDetail || f.pickupDate) {
     if (!f.pickupAddress) err.pickupAddress = "픽업 주소를 선택해주세요";
@@ -449,43 +406,33 @@ watch(
     const err = {};
 
     if (!f.name?.trim()) err.name = "이름을 입력해주세요";
-    if (!f.phone || !/^\d{10,11}$/.test(f.phone))
-      err.phone = "휴대폰 번호로 입력해주세요 (-제외)";
+    if (!f.phone || !/^\d{10,11}$/.test(f.phone)) err.phone = "휴대폰 번호로 입력해주세요 (-제외)";
     if (!f.size) err.size = "사물함 사이즈를 선택해주세요";
     if (!f.address) err.address = "대여 장소를 선택해주세요";
 
     // ✅ dateRange 보강 (원래 로직 + 추가 조건)
     if (!f.dateRange || f.dateRange.length < 2) {
       err.dateRange = "예약 기간을 선택해주세요";
-    } else if (
-      f.dateRange[0] &&
-      f.dateRange[1] &&
-      f.dateRange[0] === f.dateRange[1]
-    ) {
+    } else if (f.dateRange[0] && f.dateRange[1] && f.dateRange[0] === f.dateRange[1]) {
       err.dateRange = "시작일과 종료일이 같을 수 없습니다.";
     }
 
     if (f.pickupAddress || f.pickupAddressDetail || f.pickupDate) {
       if (!f.pickupAddress) err.pickupAddress = "픽업 주소를 선택해주세요";
-      if (!f.pickupAddressDetail)
-        err.pickupAddressDetail = "픽업 상세주소를 입력해주세요";
-      if (!f.pickupDate)
-        err.pickupDate = "픽업일을 선택하고 확인 버튼을 눌러주세요";
+      if (!f.pickupAddressDetail) err.pickupAddressDetail = "픽업 상세주소를 입력해주세요";
+      if (!f.pickupDate) err.pickupDate = "픽업일을 선택하고 확인 버튼을 눌러주세요";
     }
 
     if (f.homeAddress || f.homeAddressDetail || f.deliveryDate) {
       if (!f.homeAddress) err.homeAddress = "배송 주소를 선택해주세요";
-      if (!f.homeAddressDetail)
-        err.homeAddressDetail = "배송 상세주소를 입력해주세요";
-      if (!f.deliveryDate)
-        err.deliveryDate = "배송일을 선택하고 확인 버튼을 눌러주세요";
+      if (!f.homeAddressDetail) err.homeAddressDetail = "배송 상세주소를 입력해주세요";
+      if (!f.deliveryDate) err.deliveryDate = "배송일을 선택하고 확인 버튼을 눌러주세요";
     }
 
     errors.value = err;
   },
   { deep: true, flush: "post" } // ✅ flush 보강
 );
-
 
 // ✅ 입력 감지
 const hasInput = computed(() => {
@@ -507,7 +454,8 @@ function handleBranchSelect(location) {
 const rentalDays = computed(() => {
   const r = form.value.dateRange;
   if (!r || r.length < 2) return 0;
-  const s = new Date(r[0]), e = new Date(r[1]);
+  const s = new Date(r[0]),
+    e = new Date(r[1]);
   return (e - s) / (1000 * 60 * 60 * 24) + 1;
 });
 
@@ -531,20 +479,15 @@ const handleSubmit = () => {
     alertMessage.value = "입력값을 다시 확인해주세요.";
     showAlert.value = true;
 
-    if (
-      errors.value.name || errors.value.phone || errors.value.size ||
-      errors.value.address || errors.value.dateRange
-    ) openSection.value = "locker";
-    else if (
-      errors.value.pickupAddress || errors.value.pickupAddressDetail || errors.value.pickupDate
-    ) openSection.value = "arrival";
-    else if (
-      errors.value.homeAddress || errors.value.homeAddressDetail || errors.value.deliveryDate
-    ) openSection.value = "luggage";
+    if (errors.value.name || errors.value.phone || errors.value.size || errors.value.address || errors.value.dateRange)
+      openSection.value = "locker";
+    else if (errors.value.pickupAddress || errors.value.pickupAddressDetail || errors.value.pickupDate)
+      openSection.value = "arrival";
+    else if (errors.value.homeAddress || errors.value.homeAddressDetail || errors.value.deliveryDate)
+      openSection.value = "luggage";
     return;
   }
-showTerms.value = true; // ✅ 약관 모달 열기
-
+  showTerms.value = true; // ✅ 약관 모달 열기
 };
 // 모바일 카드분리
 // 카드 순서 배열
@@ -594,17 +537,14 @@ function handleMove(target) {
   form.value = { ...f };
 }
 
-
 // ============모바일 추가======
 // Reservation.vue
 const showConfirm = ref(false); // ✅ 확인창 표시 상태
-
 
 // 1024이하에서
 // 지금 있는 것들 위/아래 아무데나 적당히
 const windowWidth = ref(0);
 const isTabletOrBelow = computed(() => windowWidth.value <= 1024);
-
 
 // 창 크기 바뀔 때마다 이걸로 갱신
 const updateWidth = () => {
@@ -639,12 +579,9 @@ function handleMobileComplete() {
 
   showConfirm.value = true; // ✅ 이때만 모달
 }
-
-
 </script>
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
-@use "/src/assets/style/_reservation" as *;
 
 .wrap {
   background: #f5f7f7;
@@ -723,6 +660,7 @@ function handleMobileComplete() {
     grid-template-columns: 1fr;
     gap: 2rem;
     max-width: 700px;
+    margin: 0 auto; /* 중앙정렬 */
   }
   .submit_btn {
     width: 90%;
@@ -742,7 +680,6 @@ function handleMobileComplete() {
     padding: 12px 0;
   }
 }
-
 
 /* =========================================================
   ✅ Tablet 이하에서만 단계형 카드 전환 활성화
@@ -776,14 +713,16 @@ function handleMobileComplete() {
     }
   }
 }
- //=================모바일=========
- /* Reservation.vue style 영역 맨 아래 */
+//=================모바일=========
+/* Reservation.vue style 영역 맨 아래 */
 .mobile-submit {
   display: none;
 }
 
 @media (max-width: 1024px) {
-  .right { display: none; } /* ✅ 요약카드 숨기기 */
+  .right {
+    display: none;
+  } /* ✅ 요약카드 숨기기 */
 
   .mobile-submit {
     display: block;
@@ -803,7 +742,7 @@ function handleMobileComplete() {
 .confirm-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.35);
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -815,5 +754,4 @@ function handleMobileComplete() {
   padding: 20px;
   width: min(90vw, 400px);
 }
-
 </style>

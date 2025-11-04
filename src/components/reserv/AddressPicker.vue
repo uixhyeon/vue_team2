@@ -14,10 +14,10 @@
         </button>
       </div>
 
-      <!-- ✅ 지도/주소 검색만 남김 -->
+      <!-- 지도/주소 검색 -->
       <div class="content">
         <div ref="postcodeWrap" class="postcode-wrap"></div>
-        <p class="hint">검색 후 결과를 클릭하면 주소가 자동 입력됩니다.</p>
+        <p class="hint">선택을 하시면 주소가 자동 입력됩니다.</p>
 
         <div v-if="hasKakaoKey" class="map-wrap">
           <div ref="mapEl" class="map"></div>
@@ -49,27 +49,27 @@ const mapEl = ref(null);
 const hasKakaoKey = Boolean(import.meta.env.VITE_KAKAO_MAP_APP_KEY);
 let map, marker, geocoder;
 
-// ✅ 주소 선택 완료 시 실행
+// 주소 선택 완료 시 실행
 function confirm() {
   if (!localAddress.value) return;
   emit("update:modelValue", localAddress.value);
   emit("selected", localAddress.value);
-  setTimeout(() => emit("close"), 800); // ✅ 0.8초 뒤 자동 닫힘
+  setTimeout(() => emit("close"), 400); //  0.4초 대기
 }
 
-// ✅ 모달 열릴 때마다 주소창 새로 mount
+// 모달 열릴 때마다 주소창 새로 검색
 watch(
   () => props.open,
   async (v) => {
     if (v) {
       localAddress.value = props.modelValue || "";
-      await nextTick(); // ✅ DOM 렌더 후 실행 보장
+      await nextTick(); // DOM 렌더 후 실행 되게
       mountPostcode();
     }
   }
 );
 
-// ✅ 다음 주소 API 로드
+// 주소 API 가져오기
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) return resolve();
@@ -86,26 +86,16 @@ async function mountPostcode() {
     "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
   );
   const Postcode = new window.daum.Postcode({
-//     oncomplete: (data) => {
-//       // const addr = data.roadAddress || data.address;
-//       // ✅ 무조건 한글 도로명 또는 지번주소만 저장
-// const addr = data.roadAddress || data.jibunAddress || data.address;
 
-//       localAddress.value = addr;
-//       emit("update:modelValue", addr);
-//       emit("selected", addr);
-//       setTimeout(() => emit("close"), 800); // ✅ 주소 선택 후 자동 닫힘
-//       if (hasKakaoKey) moveMapTo(addr);
-//     },
 oncomplete: (data) => {
-  // ✅ 무조건 한글 주소만 저장하도록 수정
+  //  한글 주소만 저장하도록 수정
   const addr = data.roadAddress || data.jibunAddress || data.address;
 
   localAddress.value = addr;
   emit("update:modelValue", addr);
   emit("selected", addr);
 
-  setTimeout(() => emit("close"), 800); // ✅ 주소 선택 후 자동 닫힘
+  setTimeout(() => emit("close"), 800); // 주소 선택 후 자동 닫힘
 
   if (hasKakaoKey) moveMapTo(addr);
 },
@@ -115,7 +105,7 @@ oncomplete: (data) => {
   });
   Postcode.embed(postcodeWrap.value);
 
-  // ✅ Kakao 지도 선택적으로 표시
+  // Kakao 지도 선택적으로 표시
   if (hasKakaoKey) {
     const key = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
     await loadScript(
@@ -220,7 +210,6 @@ onMounted(async () => {
   border-radius: $radius-s;
   overflow: hidden;
   position: relative;
-  background-color: red;
   @media (max-width: 480px) {
     height: 100%;
   }
@@ -228,7 +217,7 @@ onMounted(async () => {
 
 /* 선택완료 */
 .postcode-wrap::before {
-  content: "😀 선택 완료";
+  content: "✔️ 선택 완료";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -286,7 +275,7 @@ onMounted(async () => {
   transition: 0.25s;
 }
 
-/* ✅ 비활성화 상태 (선택 전) */
+/* 선택전 비활성화 상태  */
 .btn:disabled {
   background: #d1d1d1;
   color: #fff;
@@ -294,7 +283,7 @@ onMounted(async () => {
   box-shadow: none;
 }
 
-/* ✅ 활성화 상태 (주소 선택 후) */
+/* 선택후 활성화 상태  */
 .btn:not(:disabled) {
   background: $color_main;
   color: #fff;

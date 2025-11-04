@@ -1,12 +1,12 @@
 <template>
   <div class="confirm-overlay" @click.self="$emit('close')">
     <div class="confirm-box">
-      <!-- ✅ 상단 아이콘 -->
+      <!-- 상단 아이콘 -->
       <div class="icon-wrap">
         <i class="fa-solid fa-circle-check"></i>
       </div>
 
-      <!-- ✅ 결제 완료 문구 -->
+      <!-- 결제 완료 문구 -->
       <h2>결제가 완료되었습니다 🎉</h2>
       <p class="complete-message">
         결제수단: {{ paymentMethod }}<br />
@@ -14,7 +14,7 @@
         예약번호: <strong>{{ orderId }}</strong>
       </p>
 
-      <!-- ✅ 버튼 -->
+      <!-- 버튼 -->
   <div class="confirm-actions">
   <button class="btn line" @click="$emit('close')">확인</button>
 </div>

@@ -7,6 +7,7 @@ import Serch from "./mains/Serch.vue";
 import Review from "./mains/Review.vue";
 </script>
 <template>
+  <img class="thumb" src="/public/images/mains/thumb.png" alt="썸네일">
   <Banner />
   <About />
   <Review />
@@ -14,4 +15,8 @@ import Review from "./mains/Review.vue";
   <Serch />
   <Faq />
 </template>
-<style scoped></style>
+<style scoped>
+.thumb{
+  display: none;
+}
+</style>
