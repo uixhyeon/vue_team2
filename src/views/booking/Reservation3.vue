@@ -132,7 +132,7 @@
                 </tbody>
               </table>
 
-              <p class="toggle-mini" @click="showDetail = false">닫기 ▾</p>
+              <p class="toggle-mini" @click="showDetail = false">닫기 ▴</p>
             </div>
           </div>
 

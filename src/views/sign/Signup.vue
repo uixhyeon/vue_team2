@@ -183,8 +183,8 @@ watch(
   { deep: true, immediate: true }
 );
 
-//인증성공 필수체크해야
-const canSubmit = computed(() => isVerified.value && requiredAllChecked.value);
+// 필수 체크박스만 모두 체크하면 활성화
+const canSubmit = computed(() => requiredAllChecked.value);
 
 //서브밋
 const onSubmit = () => {

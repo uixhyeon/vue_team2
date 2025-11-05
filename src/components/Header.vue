@@ -56,12 +56,12 @@
         <div class="quick-row">
           <router-link to="/login" class="quick-link" @click="close()">로그인</router-link>
           <span class="sep" aria-hidden="true">|</span>
-          <router-link to="/signup" class="quick-link" @click="close()">예약 확인</router-link>
+          <router-link to="/findreserv" class="quick-link" @click="close()">예약 확인</router-link>
         </div>
 
         <ul class="mobile-list">
           <li><router-link to="/information" class="m-title link-title" @click="close()">이용안내</router-link></li>
-          <li><router-link to="/reservation" class="m-title link-title" @click="close()">예약하기</router-link></li>
+          <li><router-link to="/login" class="m-title link-title" @click="close()">예약하기</router-link></li>
           <li><router-link to="/promotion" class="m-title link-title" @click="close()">프로모션</router-link></li>
           <li><router-link to="/community" class="m-title link-title" @click="close()">커뮤니티</router-link></li>
           <li><router-link to="/support" class="m-title link-title" @click="close()">고객센터</router-link></li>

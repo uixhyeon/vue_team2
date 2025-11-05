@@ -276,8 +276,8 @@ padding: 40px 0 80px 0;
  width: 100%;
  display: grid;
 grid-template-columns: 1fr 1fr;
-gap: 2.5rem;
-  @media (max-width: 500px){
+gap: 20px;
+  @media (max-width: 600px){
      grid-template-columns: 1fr;
   }
 }

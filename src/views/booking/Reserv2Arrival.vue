@@ -302,6 +302,7 @@ const isComplete = computed(() => {
     flex-direction: column;
     gap: 10px;
 
+
     .card-btn {
       padding: 16px 0;
       font-size: 0.95rem;
@@ -309,6 +310,13 @@ const isComplete = computed(() => {
   }
 }
 
+
+//버튼그룹 피씨에서는 안보임
+@media (min-width: 1025px) {
+  .btn-group-wrap {
+    display: none !important;
+  }
+}
 // ============뷰데이픽커================
 
 // ============뷰데이픽커================
