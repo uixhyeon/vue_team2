@@ -14,81 +14,121 @@
           <div class="card_content">
             <table class="receipt_table">
               <colgroup>
-                <col style="width: 65%;" />
-                <col style="width: 35%;" />
+                <col style="width: 65%" />
+                <col style="width: 35%" />
               </colgroup>
               <tbody>
-                <tr><td>결제 수단</td><td>{{ paymentLabel }}</td></tr>
-                <tr v-if="useCoupon"><td>쿠폰 할인</td><td>- {{ formatKrw(3000) }}</td></tr>
-                <tr v-if="usePoints"><td>포인트 사용</td><td>- {{ formatKrw(2500) }}</td></tr>
+                <tr>
+                  <td>결제 수단</td>
+                  <td>{{ paymentLabel }}</td>
+                </tr>
+                <tr v-if="useCoupon">
+                  <td>쿠폰 할인</td>
+                  <td>- {{ formatKrw(3000) }}</td>
+                </tr>
+                <tr v-if="usePoints">
+                  <td>포인트 사용</td>
+                  <td>- {{ formatKrw(2500) }}</td>
+                </tr>
                 <tr class="total">
                   <td>최종 결제 금액</td>
-                  <td><strong>{{ formatKrw(finalTotal) }}</strong></td>
+                  <td>
+                    <strong>{{ formatKrw(finalTotal) }}</strong>
+                  </td>
                 </tr>
               </tbody>
             </table>
 
-         <div class="receipt_footer">
-  <p>주문번호 : {{ orderId }}</p>
-  <p>결제일시 : {{ formattedNow }}</p>
-</div>
-
+            <div class="receipt_footer">
+              <p>주문번호 : {{ orderId }}</p>
+              <p>결제일시 : {{ formattedNow }}</p>
+            </div>
           </div>
 
           <!-- 예약 완료 -->
-          <div class="card_header">
-          </div>
-          
+          <div class="card_header"></div>
+
           <div class="card_content">
             <!-- 요약 보기 -->
             <div v-if="!showDetail" class="summary-view">
-  <h3 class="summary-title">예약 성공!</h3>
+              <h3 class="summary-title">예약 성공!</h3>
 
-  <div class="branch-size">
-    <span>{{ form.address || "지점 미선택" }}</span>
-    <span>{{ form.size || "-" }} 사이즈</span>
-  </div>
+              <div class="branch-size">
+                <span>{{ form.address || "지점 미선택" }}</span>
+                <span>{{ form.size || "-" }} 사이즈</span>
+              </div>
 
-  <p class="service-type">{{ selectedServices.join(" | ") }}</p>
-  
-  <div class="date-box">
-    {{ formatShortDate(form.dateRange[0]) }} ~ {{ formatShortDate(form.dateRange[1]) }}
-  </div>
+              <p class="service-type">{{ selectedServices.join(" | ") }}</p>
 
-  <div class="pickup-delivery">
-    <p v-if="form.pickupDate">픽업일 <span>{{ formatShortDate(form.pickupDate) }}</span></p>
-    <p v-if="form.deliveryDate">배송요청일 <span>{{ formatShortDate(form.deliveryDate) }}</span></p>
-  </div>
-  
-  <p class="toggle-mini" @click="showDetail = true">상세보기 ▸</p>
-  
-  
-</div>
+              <div class="date-box">
+                {{ formatShortDate(form.dateRange[0]) }} ~ {{ formatShortDate(form.dateRange[1]) }}
+              </div>
 
+              <div class="pickup-delivery">
+                <p v-if="form.pickupDate">
+                  픽업일 <span>{{ formatShortDate(form.pickupDate) }}</span>
+                </p>
+                <p v-if="form.deliveryDate">
+                  배송요청일 <span>{{ formatShortDate(form.deliveryDate) }}</span>
+                </p>
+              </div>
 
-<!-- 상세 보기 -->
-<div v-else class="detail-view">
+              <p class="toggle-mini" @click="showDetail = true">상세보기 ▸</p>
+            </div>
+
+            <!-- 상세 보기 -->
+            <div v-else class="detail-view">
               <h3>예약 완료</h3>
               <table class="receipt_table">
                 <colgroup>
-                  <col style="width: 65%;" />
-                  <col style="width: 35%;" />
+                  <col style="width: 65%" />
+                  <col style="width: 35%" />
                 </colgroup>
                 <tbody>
-                  <tr v-if="form.name"><td>성함</td><td>{{ form.name }}</td></tr>
-                  <tr v-if="form.phone"><td>휴대폰</td><td>{{ form.phone }}</td></tr>
-                  <tr v-if="form.size"><td>사물함 사이즈</td><td>{{ form.size }}</td></tr>
-                  <tr v-if="form.address"><td>대여 장소</td><td>{{ form.address }}</td></tr>
+                  <tr v-if="form.name">
+                    <td>성함</td>
+                    <td>{{ form.name }}</td>
+                  </tr>
+                  <tr v-if="form.phone">
+                    <td>휴대폰</td>
+                    <td>{{ form.phone }}</td>
+                  </tr>
+                  <tr v-if="form.size">
+                    <td>사물함 사이즈</td>
+                    <td>{{ form.size }}</td>
+                  </tr>
+                  <tr v-if="form.address">
+                    <td>대여 장소</td>
+                    <td>{{ form.address }}</td>
+                  </tr>
                   <tr v-if="form.dateRange && form.dateRange[0] && form.dateRange[1]">
                     <td>예약 기간</td>
                     <td>{{ formatDate(form.dateRange[0]) }} ~ {{ formatDate(form.dateRange[1]) }}</td>
                   </tr>
-                  <tr v-if="form.pickupAddress"><td>픽업 주소</td><td>{{ form.pickupAddress }}</td></tr>
-                  <tr v-if="form.pickupAddressDetail"><td>상세 주소</td><td>{{ form.pickupAddressDetail }}</td></tr>
-                  <tr v-if="form.pickupDate"><td>픽업일</td><td>{{ formatDate(form.pickupDate) }}</td></tr>
-                  <tr v-if="form.homeAddress"><td>배송 주소</td><td>{{ form.homeAddress }}</td></tr>
-                  <tr v-if="form.homeAddressDetail"><td>상세 주소</td><td>{{ form.homeAddressDetail }}</td></tr>
-                  <tr v-if="form.deliveryDate"><td>배송일</td><td>{{ formatDate(form.deliveryDate) }}</td></tr>
+                  <tr v-if="form.pickupAddress">
+                    <td>픽업 주소</td>
+                    <td>{{ form.pickupAddress }}</td>
+                  </tr>
+                  <tr v-if="form.pickupAddressDetail">
+                    <td>상세 주소</td>
+                    <td>{{ form.pickupAddressDetail }}</td>
+                  </tr>
+                  <tr v-if="form.pickupDate">
+                    <td>픽업일</td>
+                    <td>{{ formatDate(form.pickupDate) }}</td>
+                  </tr>
+                  <tr v-if="form.homeAddress">
+                    <td>배송 주소</td>
+                    <td>{{ form.homeAddress }}</td>
+                  </tr>
+                  <tr v-if="form.homeAddressDetail">
+                    <td>상세 주소</td>
+                    <td>{{ form.homeAddressDetail }}</td>
+                  </tr>
+                  <tr v-if="form.deliveryDate">
+                    <td>배송일</td>
+                    <td>{{ formatDate(form.deliveryDate) }}</td>
+                  </tr>
                 </tbody>
               </table>
 
@@ -100,8 +140,7 @@
           <div class="qr-section always">
             <img :src="qrImage" alt="예약 QR코드" class="qr-thumb" @click="showQRModal = true" />
             <p class="qr-desc">예약 QR코드</p>
-           <p class="qr-desc">예약번호: {{ orderId }}</p>
-
+            <p class="qr-desc">예약번호: {{ orderId }}</p>
           </div>
         </div>
 
@@ -162,11 +201,16 @@ const total = Number(route.query.total) || 0;
 // 결제 수단명
 const paymentLabel = computed(() => {
   switch (selectedPayment.value) {
-    case "card": return "💳 신용카드";
-    case "kakao": return "💬 카카오페이";
-    case "naver": return "N Pay";
-    case "bank": return "🏦 무통장입금";
-    default: return "-";
+    case "card":
+      return "💳 신용카드";
+    case "kakao":
+      return "💬 카카오페이";
+    case "naver":
+      return "N Pay";
+    case "bank":
+      return "🏦 무통장입금";
+    default:
+      return "-";
   }
 });
 
@@ -181,8 +225,7 @@ const discount = computed(() => {
 const finalTotal = computed(() => total);
 
 // 통화 포맷
-const formatKrw = (v) =>
-  new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW" }).format(v);
+const formatKrw = (v) => new Intl.NumberFormat("ko-KR", { style: "currency", currency: "KRW" }).format(v);
 
 // 현재 시각
 const formattedNow = new Date().toLocaleString("ko-KR", {
@@ -208,8 +251,6 @@ const downloadQR = () => {
   link.download = "예약_QR.png";
   link.click();
 };
-
-
 
 // 날짜 포맷 함수 제일 밑에 둑기
 
@@ -244,14 +285,14 @@ const formatShortDate = (date) => {
   const day = d.getDate();
   return `${y}.${m}.${day}`;
 };
-
 </script>
 <style scoped lang="scss">
 @use "/src/assets/style/variables" as *;
 
 // ===========폰트크기설정================
 /* // 메인제목 : 20~22px */
-.main-title, .card_header h3 {
+.main-title,
+.card_header h3 {
   font-size: clamp(1.25rem, 1.8vw, 1.375rem);
   font-weight: 700;
   color: #222;
@@ -260,7 +301,8 @@ const formatShortDate = (date) => {
 }
 
 /* // 소제목 : 18~20px */
-.section-title, .summary-title {
+.section-title,
+.summary-title {
   font-size: clamp(1.125rem, 1.5vw, 1.25rem);
   font-weight: 600;
   color: #333;
@@ -269,7 +311,10 @@ const formatShortDate = (date) => {
 }
 
 /* // 본문텍스트 : 16~18px */
-.body-text, .receipt_table td, .pickup-delivery, .date-box {
+.body-text,
+.receipt_table td,
+.pickup-delivery,
+.date-box {
   font-size: clamp(1rem, 1.1vw, 1.125rem);
   color: #444;
   line-height: 1.6;
@@ -277,7 +322,10 @@ const formatShortDate = (date) => {
 }
 
 /* // 부가텍스트 : 14~15px */
-.sub-text, .qr-desc, .toggle-mini, .receipt_footer {
+.sub-text,
+.qr-desc,
+.toggle-mini,
+.receipt_footer {
   font-size: clamp(0.875rem, 0.9vw, 0.95rem);
   color: #777;
   line-height: 1.5;
@@ -286,6 +334,7 @@ const formatShortDate = (date) => {
 //배경부터
 .reserve-page {
   background: #f5f7f7;
+  padding: 40px 0 80px;
 }
 
 .inner {
@@ -304,15 +353,17 @@ const formatShortDate = (date) => {
   border: 1px solid #fff;
   position: relative;
   width: 100%;
-  max-width: 768px;
+  max-width: 650px;
   padding: clamp(20px, 3vw, 28px) clamp(16px, 4vw, 24px);
   box-sizing: border-box;
   transition: padding 0.2s ease, font-size 0.2s ease;
+  padding: 20px;
 
   &::before {
     content: "";
     position: absolute;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 12px;
     background: $color_main;
@@ -546,7 +597,7 @@ const formatShortDate = (date) => {
 //====미디어 쿼리================
 @media (max-width: 600px) {
   .form_card {
-    padding: 20px 16px;
+    width: 90%;
 
     .receipt_table td {
       padding: 6px 0;
@@ -567,11 +618,10 @@ const formatShortDate = (date) => {
   }
 
   .submit_btn {
-    width: 100%;
+    width: 70%;
     max-width: none;
   }
 }
-
 
 //====요약 보기================
 .summary-view {
@@ -613,7 +663,7 @@ const formatShortDate = (date) => {
 
   /* 여기 추가 */
   .date-box {
-    background: $color_main_background; 
+    background: $color_main_background;
     border: 1px solid rgba(0, 0, 0, 0.05);
     border-radius: $radius-s;
     color: #222;
@@ -622,7 +672,7 @@ const formatShortDate = (date) => {
     display: inline-block;
     padding: clamp(10px, 1vw, 12px) clamp(14px, 2vw, 16px);
     margin-bottom: 1.2rem;
-    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.03); 
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.03);
   }
 
   .pickup-delivery {
@@ -643,6 +693,4 @@ const formatShortDate = (date) => {
     }
   }
 }
-
-
 </style>

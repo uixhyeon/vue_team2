@@ -35,9 +35,7 @@
         <button type="submit" class="login-btn">로그인</button>
 
         <!--  비회원 예약 -->
-        <button type="button" class="login-btn-2" @click="goGuestReserve">
-          비회원 예약하기
-        </button>
+        <button type="button" class="login-btn-2" @click="goGuestReserve">비회원 예약하기</button>
 
         <!-- 찾기 링크 -->
         <div class="link-row">
@@ -51,16 +49,8 @@
 
       <div class="social-login">
         <button class="naver" aria-label="네이버 로그인">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="40"
-            height="30"
-            viewBox="0 0 600 500"
-          >
-            <path
-              fill="#ffffff"
-              d="M176 128h88l72 112V128h88v256h-88l-72-112v112h-88V128z"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="30" viewBox="0 0 600 500">
+            <path fill="#ffffff" d="M176 128h88l72 112V128h88v256h-88l-72-112v112h-88V128z" />
           </svg>
         </button>
 
@@ -112,10 +102,8 @@ const isCustom = computed(() => emailDomain.value === "custom");
 // 전체 이메일
 const fullEmail = computed(() => {
   if (!emailId.value) return "";
-  if (isCustom.value && customDomain.value)
-    return `${emailId.value}@${customDomain.value}`;
-  if (!isCustom.value && emailDomain.value)
-    return `${emailId.value}@${emailDomain.value}`;
+  if (isCustom.value && customDomain.value) return `${emailId.value}@${customDomain.value}`;
+  if (!isCustom.value && emailDomain.value) return `${emailId.value}@${emailDomain.value}`;
   return "";
 });
 
@@ -130,25 +118,19 @@ const showFindPw = ref(false);
 const handleLogin = () => {
   // 둘 중 하나라도 비었거나 이메일 조합이 안되면 에러
   if (!fullEmail.value || !password.value) {
-    appContext.config.globalProperties.$alert(
-      "아이디 또는 비밀번호가 맞지 않습니다"
-    );
+    appContext.config.globalProperties.$alert("아이디 또는 비밀번호가 맞지 않습니다");
     return;
   }
 
   // 형식 검사
   const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!pattern.test(fullEmail.value)) {
-    appContext.config.globalProperties.$alert(
-      "아이디 또는 비밀번호가 맞지 않습니다"
-    );
+    appContext.config.globalProperties.$alert("아이디 또는 비밀번호가 맞지 않습니다");
     return;
   }
 
   // 성공 가정
-  appContext.config.globalProperties.$alert(
-    `로그인 성공 \n${fullEmail.value}`
-  );
+  appContext.config.globalProperties.$alert(`로그인 성공 \n${fullEmail.value}`);
   router.push("/");
 };
 
@@ -181,27 +163,27 @@ const goGuestReserve = () => {
   display: flex;
   justify-content: center;
   align-items: stretch;
-  // min-height: 60vh;
+  min-height: 70vh;
   max-width: 1120px;
-  margin: 0 auto 40px;
+  margin: 0 auto 100px;
   gap: 0;
 
- 
   @media (max-width: 900px) {
     flex-direction: column;
     align-items: center;
     // min-height: 100vh;
-    margin: 0 auto 20px; // 아래 여백 줄임
+    margin: 0 auto 100px; // 아래 여백 줄임
   }
 }
 
 .login-left {
   width: 400px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 100px;
 }
 
 .title {
@@ -217,6 +199,14 @@ const goGuestReserve = () => {
   align-items: center;
   width: 320px;
   gap: 15px;
+  color: #333;
+
+  /* 입력(이메일 아이디 / 비밀번호) placeholder 스타일 통일 */
+  input::placeholder {
+    color: #aaa;
+    opacity: 1;
+    font-size: 14px;
+  }
 
   input {
     width: 100%;
@@ -277,6 +267,7 @@ const goGuestReserve = () => {
 
     a {
       color: #666;
+
       text-decoration: none;
       transition: color 0.2s ease;
 
@@ -332,10 +323,7 @@ const goGuestReserve = () => {
 
 .coupon-banner {
   width: 100%;
-  background: linear-gradient(
-      rgba(255, 255, 255, 0.8),
-      rgba(255, 255, 255, 0.4)
-    ),
+  background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4)),
     url(/images/sign/2462865.png) no-repeat center center / cover;
   padding: 40px;
   border-radius: $radius-s;
@@ -343,7 +331,7 @@ const goGuestReserve = () => {
   text-align: center;
   max-width: 400px;
   background-color: #fff;
-
+  margin-top: 50px;
   .banner-text {
     h2 {
       font-size: 18px;
@@ -374,7 +362,7 @@ const goGuestReserve = () => {
 
     p {
       font-size: 14px;
-      color: #ccc;
+      color: #aaa;
       margin-top: 8px;
     }
 
@@ -422,10 +410,11 @@ const goGuestReserve = () => {
     background: transparent;
     padding: 0 6px;
     height: 100%;
-
-    &::placeholder {
-      color: #aaa;
-    }
+  }
+  &::placeholder {
+    color: #aaa;
+    opacity: 1;
+    font-size: 14px;
   }
 
   span {

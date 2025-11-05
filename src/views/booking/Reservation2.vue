@@ -230,7 +230,7 @@ function goHome() {
 //베이스
 .reserve-page {
   background: #f5f7f7;
-  min-height: 100vh;
+  // min-height: 100vh;
 padding: 40px 0 80px 0;
   display: flex;
   flex-direction: column;
