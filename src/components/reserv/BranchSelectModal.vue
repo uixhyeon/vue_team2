@@ -135,49 +135,67 @@ function selectBranch(branch) {
 let map, marker, geocoder;
 
 /* 카카오맵 스크립트 가져오기*/
+/* 카카오맵 스크립트 가져오기*/
 async function loadKakaoMapScript() {
   // ✅ 이미 SDK가 로드되어 있다면 중복 실행 방지
-  if (window.kakao && window.kakao.maps) return;
-  if (document.querySelector('script[src*="kakao.com/v2/maps/sdk.js"]')) {
+  if (window.kakao && window.kakao.maps) {
     console.log("⚙️ Kakao Map SDK 이미 로드됨, 재사용");
     return;
   }
   
+  if (document.querySelector('script[src*="kakao.com/v2/maps/sdk.js"]')) {
+    console.log("⚙️ Kakao Map SDK 스크립트 이미 존재");
+    // ✅ 스크립트는 있지만 로드 안 됐을 수 있으니 대기
+    await new Promise((resolve) => {
+      const checkLoaded = setInterval(() => {
+        if (window.kakao?.maps) {
+          clearInterval(checkLoaded);
+          console.log("✅ 기존 Kakao SDK 로드 완료");
+          resolve();
+        }
+      }, 100);
+    });
+    return;
+  }
+  
   const key = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
-  await new Promise((resolve) => {
+  
+  // ✅ autoload=false 사용 시 kakao.maps.load() 필수
+  return new Promise((resolve) => {
     const s = document.createElement("script");
     s.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${key}&libraries=services`;
-    s.onload = () => window.kakao.maps.load(resolve);
+    s.onload = () => {
+      console.log("📦 Kakao SDK 스크립트 로드 완료");
+      window.kakao.maps.load(() => {
+        console.log("✅ Kakao maps.load() 콜백 실행 완료");
+        resolve();
+      });
+    };
+    s.onerror = () => {
+      console.error("❌ Kakao SDK 로드 실패");
+      resolve(); // 에러 발생해도 진행
+    };
     document.head.appendChild(s);
   });
 }
 
+
 /* 지도 마운트 */
 async function mountMap() {
-  // ✅ DOM이 준비되지 않았을 때 실행 방지
   if (!modalMapEl.value) {
     console.warn("⚠️ 지도 DOM이 아직 렌더되지 않음");
     return;
   }
 
-  // ✅ 이미 지도 준비 완료되었으면 재활용
   if (map && mapReady.value) {
     console.log("♻️ 기존 지도 재사용");
     return;
   }
 
+  // ✅ SDK 로드 (이미 로드되어 있으면 즉시 반환)
   await loadKakaoMapScript();
-
-  // ✅ Kakao SDK 완전히 로드될 때까지 대기 (services 포함)
-  await new Promise((resolve) => {
-    const checkLoaded = setInterval(() => {
-      if (window.kakao?.maps?.services?.Geocoder) {
-        clearInterval(checkLoaded);
-        console.log("✅ Kakao SDK 완전 로드됨");
-        resolve();
-      }
-    }, 100);
-  });
+  
+  console.log("🗺️ 지도 생성 시작...");
 
   // ✅ 지도 생성
   const defaultCenter = new window.kakao.maps.LatLng(36.5, 127.8);
@@ -191,15 +209,16 @@ async function mountMap() {
 
   geocoder = new window.kakao.maps.services.Geocoder();
 
-  // ✅ 지도 리사이즈 처리
-  setTimeout(() => {
-    window.kakao.maps.event.trigger(map, "resize");
-    map.relayout?.();
-    mapReady.value = true;
-    console.log("✅ 지도 준비 완료:", map);
-  }, 400);
-}
+  console.log("✅ 지도 객체 생성 완료:", !!map);
 
+  // ✅ 지도 리사이즈
+  await new Promise((r) => setTimeout(r, 200));
+  window.kakao.maps.event.trigger(map, "resize");
+  map.relayout?.();
+  
+  mapReady.value = true;
+  console.log("✅ 지도 준비 완료 - mapReady: true");
+}
 
 /* 지도 이동 */
 function moveMapTo(location) {
@@ -212,7 +231,7 @@ function moveMapTo(location) {
     marker.setPosition(latlng);
     marker.setMap(map);
     console.log("📍 좌표 기반 지도 이동:", location.name, location.lat, location.lng);
-    return; // ✅ 주소 검색은 필요 없음
+    return; // ✅ 주소 검색 없이 바로 종료
   }
 
   // ✅ 2️⃣ 위도·경도가 없으면 주소 기반 검색으로 이동
@@ -229,17 +248,10 @@ function moveMapTo(location) {
       console.log("📍 주소 기반 지도 이동:", searchAddress);
     } else {
       console.warn("⚠️ 주소 검색 실패:", searchAddress, status);
-
-      // 오사카 같은 해외 지역 fallback
-      if (location.region?.includes("오사카")) {
-        const latlng = new window.kakao.maps.LatLng(34.6695, 135.5008);
-        map.setCenter(latlng);
-        marker.setPosition(latlng);
-        console.log("🌏 오사카 기본 좌표로 이동");
-      }
     }
   });
 }
+
 
 
 /* 지점 선택 */
@@ -247,43 +259,31 @@ async function selectLocation(location) {
   if (location.status === "점검중") return;
 
   const regionGroup = props.locations.find((g) => g.branches.some((b) => b.id === location.id));
-
-  // region을 확실히 포함
   const locWithRegion = { ...location, region: regionGroup?.region || "" };
 
   if (!locWithRegion.region && location.region) {
-    locWithRegion.region = location.region; // region 누락 대비
+    locWithRegion.region = location.region;
   }
 
   selectedLocation.value = locWithRegion;
+  console.log("📍 선택된 지점:", locWithRegion.name, "좌표:", locWithRegion.lat, locWithRegion.lng);
 
-  console.log("📍 선택된 지점:", locWithRegion.address);
+  // ✅ 지도 준비 대기 (최대 3초)
+  let tries = 0;
+  while ((!map || !mapReady.value) && tries < 15) {
+    console.log(`⏳ 지도 준비 중... (${tries + 1}/15)`);
+    await new Promise((r) => setTimeout(r, 200));
+    tries++;
+  }
 
-
- // ✅ 지도 준비될 때까지 확실히 기다림
- let tries = 0;
- // 지도 준비될 때까지 대기 (최대 6초)
- while (!mapReady.value && tries < 30) {
-   console.log(`⏳ 지도 준비 중... (${tries + 1})`);
-   await new Promise((r) => setTimeout(r, 200));
-   tries++;
- }
-
- // 지도 준비가 끝나면 이동
- if (mapReady.value && locWithRegion.address) {
-   console.log("✅ 지도 준비 완료, 주소로 이동:", locWithRegion.address);
-   moveMapTo(locWithRegion);
- } else if (!mapReady.value && modalMapEl.value) {
-   // 최종 보정 시도 (단 1회)
-   console.log("🛠 지도 강제 초기화 시도");
-   await mountMap();
-   if (locWithRegion.address) moveMapTo(locWithRegion);
- } else {
-   console.warn("⚠️ 여전히 지도 준비 실패");
- }
-
+  // ✅ 지도 준비 완료 확인
+  if (map && mapReady.value) {
+    console.log("✅ 지도 이동 시작");
+    moveMapTo(locWithRegion);
+  } else {
+    console.error("❌ 지도 준비 실패 - map:", !!map, "mapReady:", mapReady.value);
+  }
 }
-
 /* 길찾기 */
 function openKakaoMapDirections(location) {
   const { name, lat, lng, address } = location;
