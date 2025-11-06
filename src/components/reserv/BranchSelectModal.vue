@@ -5,7 +5,8 @@
     role="dialog"
     aria-modal="true"
     aria-labelledby="branch-title"
-    @click="$emit('close')">
+    @click="$emit('close')"
+  >
     <div class="dialog" @click.stop>
       <!-- 헤더 -->
       <div class="header">
@@ -18,38 +19,35 @@
         <div class="modal-body">
           <!-- 왼쪽: 지점 리스트 -->
           <div class="location-selection-section">
-      
-      
-<div class="location-list">
-  <!-- 지역 그룹 -->
-  <div v-for="group in locations" :key="group.region" class="region-block">
-    <h4 class="region-title">{{ group.region }}</h4>
+            <div class="location-list">
+              <!-- 지역 그룹 -->
+              <div v-for="group in locations" :key="group.region" class="region-block">
+                <h4 class="region-title">{{ group.region }}</h4>
 
-    <!-- 그룹 내 지점들 -->
-    <div
-      v-for="location in group.branches"
-      :key="location.id"
-      class="result-item"
-      :class="{
-        disabled: location.status === '점검중',
-        selected: selectedLocation && selectedLocation.id === location.id,
-      }"
-      @click="selectLocation(location)"
-    >
-      <div class="result-info">
-        <h5>{{ location.name }}</h5>
-        <p>{{ location.address }}</p>
-        <p class="locker-info">{{ location.lockers }}</p>
-        <div class="location-meta">
-          <span class="status" :class="location.status === '운영중' ? 'operating' : 'maintenance'">
-            {{ location.status }}
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
+                <!-- 그룹 내 지점들 -->
+                <div
+                  v-for="location in group.branches"
+                  :key="location.id"
+                  class="result-item"
+                  :class="{
+                    disabled: location.status === '점검중',
+                    selected: selectedLocation && selectedLocation.id === location.id,
+                  }"
+                  @click="selectLocation(location)"
+                >
+                  <div class="result-info">
+                    <h5>{{ location.name }}</h5>
+                    <p>{{ location.address }}</p>
+                    <p class="locker-info">{{ location.lockers }}</p>
+                    <div class="location-meta">
+                      <span class="status" :class="location.status === '운영중' ? 'operating' : 'maintenance'">
+                        {{ location.status }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- 오른쪽 지도 -->
@@ -67,7 +65,8 @@
                   justify-content: center;
                   position: relative;
                   border: 2px solid #028587;
-                ">
+                "
+              >
                 <div
                   style="
                     position: absolute;
@@ -78,7 +77,8 @@
                     border-radius: 8px;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                     font-size: 12px;
-                  ">
+                  "
+                >
                   📍 지점을 선택해주세요
                 </div>
                 <div style="font-size: 48px; color: #028587">🗺️</div>
@@ -110,23 +110,39 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onMounted } from "vue";
+import { ref, watch, nextTick,  } from "vue";
+
+//onMounted 삭제함..왤까
 
 const props = defineProps({
   open: { type: Boolean, default: false },
   locations: { type: Array, default: () => [] },
+  selectedBranch: { type: Object, default: null },
 });
-const emit = defineEmits(["close", "selected"]);
 
 const modalMapEl = ref(null);
 const selectedLocation = ref(null);
-const mapReady = ref(false)
+const mapReady = ref(false);
+
+// const emit = defineEmits(["close", "selected"]);
+// selectBranch 이벤트 추가
+const emit = defineEmits(["close", "selectBranch"]);
+function selectBranch(branch) {
+  emit("selectBranch", branch); // 선택된 브랜치 데이터 전달
+  emit("close"); // 닫기
+}
 
 let map, marker, geocoder;
 
 /* 카카오맵 스크립트 가져오기*/
 async function loadKakaoMapScript() {
+  // ✅ 이미 SDK가 로드되어 있다면 중복 실행 방지
   if (window.kakao && window.kakao.maps) return;
+  if (document.querySelector('script[src*="kakao.com/v2/maps/sdk.js"]')) {
+    console.log("⚙️ Kakao Map SDK 이미 로드됨, 재사용");
+    return;
+  }
+  
   const key = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
   await new Promise((resolve) => {
     const s = document.createElement("script");
@@ -138,47 +154,71 @@ async function loadKakaoMapScript() {
 
 /* 지도 마운트 */
 async function mountMap() {
-  await loadKakaoMapScript();
-  const center = new window.kakao.maps.LatLng(35.8714, 128.6014);
-  map = new window.kakao.maps.Map(modalMapEl.value, { center, level: 4 });
-  marker = new window.kakao.maps.Marker({ position: center });
-  marker.setMap(map);
-  geocoder = new window.kakao.maps.services.Geocoder();
-  window.dispatchEvent(new Event("resize"));
-  
-  window.kakao.maps.event.trigger(map, "resize"); // ✅ 지도 강제 리렌더링
-  console.log("✅ 지도 준비 완료:", map);
-    mapReady.value = true;
-}
-
-/* 지도 이동 */
-function moveMapTo(location) {
-  if (!geocoder || !location?.address) return;
-
-  let searchAddress = location.address;
-
-  // 주소 자동 보정
-if (!/광역시|특별자치도|도/.test(searchAddress)) {
-  if (location.region?.includes("부산")) searchAddress = "부산광역시 " + searchAddress;
-  else if (location.region?.includes("강릉") || location.region?.includes("속초"))
-    searchAddress = "강원특별자치도 " + searchAddress;
-  else if (location.region?.includes("전주"))
-    searchAddress = "전라북도 " + searchAddress;
-  else if (location.region?.includes("제주"))
-    searchAddress = "제주특별자치도 " + searchAddress;
-}
-
-
-  // 오사카 예외
-  if (location.region === "오사카") {
-    const latlng = new window.kakao.maps.LatLng(34.6695, 135.5008);
-    map.setCenter(latlng);
-    marker.setPosition(latlng);
-    console.log("🌏 오사카 좌표 이동 완료");
+  // ✅ DOM이 준비되지 않았을 때 실행 방지
+  if (!modalMapEl.value) {
+    console.warn("⚠️ 지도 DOM이 아직 렌더되지 않음");
     return;
   }
 
-  // 주소 검색
+  // ✅ 이미 지도 준비 완료되었으면 재활용
+  if (map && mapReady.value) {
+    console.log("♻️ 기존 지도 재사용");
+    return;
+  }
+
+  await loadKakaoMapScript();
+
+  // ✅ Kakao SDK 완전히 로드될 때까지 대기 (services 포함)
+  await new Promise((resolve) => {
+    const checkLoaded = setInterval(() => {
+      if (window.kakao?.maps?.services?.Geocoder) {
+        clearInterval(checkLoaded);
+        console.log("✅ Kakao SDK 완전 로드됨");
+        resolve();
+      }
+    }, 100);
+  });
+
+  // ✅ 지도 생성
+  const defaultCenter = new window.kakao.maps.LatLng(36.5, 127.8);
+  map = new window.kakao.maps.Map(modalMapEl.value, {
+    center: defaultCenter,
+    level: 12,
+  });
+
+  marker = new window.kakao.maps.Marker({ position: defaultCenter });
+  marker.setMap(map);
+
+  geocoder = new window.kakao.maps.services.Geocoder();
+
+  // ✅ 지도 리사이즈 처리
+  setTimeout(() => {
+    window.kakao.maps.event.trigger(map, "resize");
+    map.relayout?.();
+    mapReady.value = true;
+    console.log("✅ 지도 준비 완료:", map);
+  }, 400);
+}
+
+
+/* 지도 이동 */
+function moveMapTo(location) {
+  if (!map) return;
+
+  // ✅ 1️⃣ 위도·경도가 있으면 좌표 기반으로 바로 이동
+  if (location.lat && location.lng) {
+    const latlng = new window.kakao.maps.LatLng(location.lat, location.lng);
+    map.setCenter(latlng);
+    marker.setPosition(latlng);
+    marker.setMap(map);
+    console.log("📍 좌표 기반 지도 이동:", location.name, location.lat, location.lng);
+    return; // ✅ 주소 검색은 필요 없음
+  }
+
+  // ✅ 2️⃣ 위도·경도가 없으면 주소 기반 검색으로 이동
+  if (!geocoder || !location?.address) return;
+
+  const searchAddress = location.address.trim();
   geocoder.addressSearch(searchAddress, (results, status) => {
     if (status === window.kakao.maps.services.Status.OK && results.length > 0) {
       const { x, y } = results[0];
@@ -186,49 +226,63 @@ if (!/광역시|특별자치도|도/.test(searchAddress)) {
       map.setCenter(latlng);
       marker.setPosition(latlng);
       marker.setMap(map);
-      console.log("지도 이동 완료:", searchAddress);
+      console.log("📍 주소 기반 지도 이동:", searchAddress);
     } else {
-      console.warn("주소 검색 실패:", searchAddress, status);
+      console.warn("⚠️ 주소 검색 실패:", searchAddress, status);
+
+      // 오사카 같은 해외 지역 fallback
+      if (location.region?.includes("오사카")) {
+        const latlng = new window.kakao.maps.LatLng(34.6695, 135.5008);
+        map.setCenter(latlng);
+        marker.setPosition(latlng);
+        console.log("🌏 오사카 기본 좌표로 이동");
+      }
     }
   });
 }
-
 
 
 /* 지점 선택 */
 async function selectLocation(location) {
   if (location.status === "점검중") return;
 
-  const regionGroup = props.locations.find((g) =>
-    g.branches.some((b) => b.id === location.id)
-  );
+  const regionGroup = props.locations.find((g) => g.branches.some((b) => b.id === location.id));
 
   // region을 확실히 포함
   const locWithRegion = { ...location, region: regionGroup?.region || "" };
-  
+
   if (!locWithRegion.region && location.region) {
-  locWithRegion.region = location.region; // region 누락 대비
-}
+    locWithRegion.region = location.region; // region 누락 대비
+  }
 
   selectedLocation.value = locWithRegion;
 
   console.log("📍 선택된 지점:", locWithRegion.address);
 
-  // 지도 준비될 때까지 대기
-  let tries = 0;
-  while (!mapReady.value && tries < 10) {
-    console.log("⏳ 지도가 준비 중...");
-    await new Promise((r) => setTimeout(r, 200));
-    tries++;
-  }
 
-  if (mapReady.value && locWithRegion.address) {
-    moveMapTo(locWithRegion); // region 포함된 객체로 이동
-  } else {
-    console.warn("⚠️ 지도 미완성으로 이동 실패");
-  }
+ // ✅ 지도 준비될 때까지 확실히 기다림
+ let tries = 0;
+ // 지도 준비될 때까지 대기 (최대 6초)
+ while (!mapReady.value && tries < 30) {
+   console.log(`⏳ 지도 준비 중... (${tries + 1})`);
+   await new Promise((r) => setTimeout(r, 200));
+   tries++;
+ }
+
+ // 지도 준비가 끝나면 이동
+ if (mapReady.value && locWithRegion.address) {
+   console.log("✅ 지도 준비 완료, 주소로 이동:", locWithRegion.address);
+   moveMapTo(locWithRegion);
+ } else if (!mapReady.value && modalMapEl.value) {
+   // 최종 보정 시도 (단 1회)
+   console.log("🛠 지도 강제 초기화 시도");
+   await mountMap();
+   if (locWithRegion.address) moveMapTo(locWithRegion);
+ } else {
+   console.warn("⚠️ 여전히 지도 준비 실패");
+ }
+
 }
-
 
 /* 길찾기 */
 function openKakaoMapDirections(location) {
@@ -245,39 +299,63 @@ function openKakaoMapDirections(location) {
   }
 }
 
-/* 완료 버튼 */
 function confirm() {
-  emit("selected", { name: selectedLocation.value.name });
+  if (!selectedLocation.value) return;
+
+  // ✅ 선택된 지점을 부모로 emit (Reserv1Locker → Reservation으로 전달)
+  emit("selectBranch", selectedLocation.value);
+
+  // ✅ 모달 닫기
   emit("close");
+
+  console.log("✅ 선택 완료 emit:", selectedLocation.value.name);
 }
+
 watch(
   () => props.open,
   async (v) => {
     if (v) {
-      await loadKakaoMapScript();
+      console.log("🟢 모달 열림 — 지도 로드 시작");
       await nextTick();
-      if (!map) await mountMap();
+      await mountMap();
 
-setTimeout(() => {
-  window.kakao.maps.event.trigger(map, "resize");
-  window.dispatchEvent(new Event("resize")); // Safari 보완
-  if (selectedLocation.value?.address) {
-    moveMapTo(selectedLocation.value);
-  }
-}, 400);
-
-
+      // ✅ 지도 로드 후 강제 리사이즈
+      setTimeout(() => {
+        if (!map) return;
+        window.kakao.maps.event.trigger(map, "resize");
+        map.relayout?.();
+        window.dispatchEvent(new Event("resize"));
+        console.log("✅ 지도 리사이즈 완료");
+        if (selectedLocation.value?.address) moveMapTo(selectedLocation.value);
+      }, 400);
+    } else {
+      console.log("🔴 모달 닫힘 — 지도 유지 (재활용)");
     }
   }
 );
+// 주소전달
+watch(
+  () => props.selectedBranch,
+  (branch) => {
+    if (branch && branch.address) {
+      console.log("📍 외부 선택 지점 감지:", branch.address);
+      let tries = 0;
+      const wait = setInterval(() => {
+        if (mapReady.value) {
+          console.log("✅ 지도 준비됨, 지도 이동:", branch.address);
+          moveMapTo(branch);
+          clearInterval(wait);
+        } else if (tries++ > 15) {
+          console.warn("⚠ 지도 준비 실패 (selectedBranch watch)");
+         clearInterval(wait);
+        }
+      }, 300);
+    }
+  },
+  { deep: true }
+);
 
 
-onMounted(async () => {
-  if (props.open) {
-    await nextTick();
-    mountMap();
-  }
-});
 </script>
 
 <style scoped lang="scss">
@@ -554,10 +632,9 @@ onMounted(async () => {
 .region-title {
   font-size: 15px;
   font-weight: 700;
-  color: $color_sub ;
+  color: $color_sub;
   margin-bottom: 0.5rem;
-  border-left: 4px solid $color_sub_deep ;
+  border-left: 4px solid $color_sub_deep;
   padding-left: 8px;
 }
-
 </style>

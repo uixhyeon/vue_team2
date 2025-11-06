@@ -17,6 +17,7 @@
             @openBranch="handleOpenBranch"
             @touch="handleTouch"
             @move="handleMove"
+              v-model:selectedBranch="selectedBranch"
           />
 
           <!-- ② 짐 가져오기 -->
@@ -66,8 +67,9 @@
     <BranchSelectModal
       :open="showBranchModal"
       :locations="locations"
+       :selectedBranch="selectedBranch"   
       @close="showBranchModal = false"
-      @selected="handleBranchSelect"
+      @selectBranch="handleBranchSelect"
     />
 
     <AddressPicker
@@ -108,10 +110,13 @@ import Stepper from "@/components/reserv/Stepper.vue";
 import ReasrAgree from "@/components/reserv/ReserAgree.vue";
 
 import Reserv1Locker from "@/views/booking/Reserv1Locker.vue";
+
 import Reserv2Arrival from "@/views/booking/Reserv2Arrival.vue";
 import Reserv3Luggage from "@/views/booking/Reserv3Luggage.vue";
 import Reserv4Summary from "@/views/booking/Reserv4Summary.vue";
+
 import BranchSelectModal from "@/components/reserv/BranchSelectModal.vue";
+
 import AddressPicker from "@/components/reserv/AddressPicker.vue";
 import ConfirmReserv from "@/components/reserv/ConfirmReserv.vue";
 
@@ -152,6 +157,8 @@ const locations = [
         id: 1,
         name: "광안리 해변점",
         address: "부산광역시 수영구 광안해변로 203",
+        lat: 35.1531,
+        lng: 129.1187,
         lockers: "3개 남음",
         status: "운영중",
       },
@@ -159,6 +166,8 @@ const locations = [
         id: 2,
         name: "광안시장점",
         address: "부산광역시 수영구 남천동로 12-1", // 📍 실제 존재 주소
+        lat: 35.1475,
+        lng: 129.1092,
         lockers: "5개 남음",
         status: "운영중",
       },
@@ -166,6 +175,8 @@ const locations = [
         id: 3,
         name: "광안역점",
         address: "부산광역시 수영구 광안로 45",
+        lat: 35.1556,
+        lng: 129.1139,
         lockers: "4개 남음",
         status: "점검중",
       },
@@ -177,14 +188,18 @@ const locations = [
       {
         id: 4,
         name: "강릉역점",
-        address: "강원특별자치도 강릉시 용지로 123", // 📍 '강원특별자치도'로 변경됨
+        address: "강원특별자치도 강릉시 용지로 123",
+        lat: 37.7642,
+        lng: 128.8997,
         lockers: "6개 남음",
         status: "운영중",
       },
       {
         id: 5,
         name: "경포해변점",
-        address: "강원특별자치도 강릉시 창해로 240-3", // 📍 경포해수욕장 인근 실제 도로명
+        address: "강원특별자치도 강릉시 창해로 240-3",
+        lat: 37.7956,
+        lng: 128.9152,
         lockers: "7개 남음",
         status: "운영중",
       },
@@ -196,14 +211,18 @@ const locations = [
       {
         id: 6,
         name: "속초중앙시장점",
-        address: "강원특별자치도 속초시 중앙로 147", // 📍 중앙시장 중심 좌표
+        address: "강원특별자치도 속초시 중앙로 147",
+        lat: 38.2073,
+        lng: 128.5912,
         lockers: "2개 남음",
         status: "운영중",
       },
       {
         id: 7,
         name: "속초해수욕장점",
-        address: "강원특별자치도 속초시 해오름로 190", // 📍 실제 해수욕장 중심 위치
+        address: "강원특별자치도 속초시 해오름로 190",
+        lat: 38.1792,
+        lng: 128.6094,
         lockers: "7개 남음",
         status: "점검중",
       },
@@ -215,7 +234,9 @@ const locations = [
       {
         id: 8,
         name: "전주한옥마을점",
-        address: "전라북도 전주시 완산구 기린대로 99", // 📍 실제 한옥마을 입구 인근
+        address: "전라북도 전주시 완산구 기린대로 99",
+        lat: 35.8151,
+        lng: 127.1527,
         lockers: "2개 남음",
         status: "운영중",
       },
@@ -227,14 +248,18 @@ const locations = [
       {
         id: 9,
         name: "제주시청점",
-        address: "제주특별자치도 제주시 관덕로 9", // 📍 제주시청 맞은편
+        address: "제주특별자치도 제주시 관덕로 9",
+        lat: 33.5113,
+        lng: 126.5207,
         lockers: "2개 남음",
         status: "운영중",
       },
       {
         id: 10,
         name: "서귀포점",
-        address: "제주특별자치도 서귀포시 중문관광로 72", // 📍 중문관광단지 내 위치
+        address: "제주특별자치도 서귀포시 중문관광로 72",
+        lat: 33.2540,
+        lng: 126.4146,
         lockers: "6개 남음",
         status: "운영중",
       },
@@ -247,6 +272,8 @@ const locations = [
         id: 11,
         name: "난바역점",
         address: "Namba Station, Osaka, Japan",
+        lat: 34.6667,
+        lng: 135.5010,
         lockers: "3개 남음",
         status: "운영중",
       },
@@ -254,12 +281,18 @@ const locations = [
         id: 12,
         name: "우메다점",
         address: "2-14-7 Sonezaki, Kita Ward, Osaka, Japan",
+        lat: 34.7033,
+        lng: 135.4983,
         lockers: "5개 남음",
         status: "운영중",
       },
     ],
   },
 ];
+
+
+// ✅ 추가: 선택된 지점 상태
+const selectedBranch = ref(null);
 
 // ✅ 공통 폼 상태
 const form = ref({
@@ -447,6 +480,8 @@ const openHomeAddr = ref(false);
 
 function handleBranchSelect(location) {
   form.value.address = location.name;
+    selectedBranch.value = location; // ✅ 선택 지점 전체 저장
+  console.log(" 선택된 지점:", location); // ✅ 연결 확인용 테스트용
   showBranchModal.value = false;
 }
 

@@ -156,9 +156,11 @@ const props = defineProps({
   isOpen: { type: Boolean, default: true },
   errors: { type: Object, default: () => ({}) },
   touched: { type: Object, default: () => ({}) },
+   selectedBranch: { type: Object, default: null },
 });
 
-const emit = defineEmits(["update:form", "openBranch", "toggle", "touch", "move"]);
+const emit = defineEmits(["update:form", "openBranch", "toggle", "touch", "move",
+  "update:selectedBranch",]);
 
 
 const localForm = computed({
@@ -176,6 +178,18 @@ function handleOpenBranch() {
     return;
   }
   emit("openBranch"); // 부모로 전달
+}
+
+// ✅ BranchSelectModal에서 선택된 지점 처리
+function handleBranchSelect(branch) {
+  // 부모로 선택된 지점 전달
+  emit("update:selectedBranch", branch);
+
+  // 선택된 지점을 form.address에도 반영 (선택사항)
+  localForm.value.address = branch.name;
+
+  // 모달 닫기용 이벤트 (Reservation이 처리)
+  emit("openBranch", false);
 }
 
 // 입력 완료 여부 (체크 아이콘 표시)
