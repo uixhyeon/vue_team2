@@ -28,6 +28,7 @@
             />
             <button type="button" class="mini-btn" @click="$emit('openPickup')">
               주소 검색
+               <i class="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
           <p v-if="touched.pickupAddress && errors.pickupAddress" class="error">
@@ -220,7 +221,7 @@ const isComplete = computed(() => {
     align-items: center;
 
     .mini-btn {
-      width: 100px;
+      width: 120px;
       padding: 8px 12px;
       border-radius: $radius-s;
       background: $color_main;
@@ -257,7 +258,7 @@ const isComplete = computed(() => {
 
   .card-btn {
     flex: 1;
-    border-radius: $radius-m ;
+    border-radius: $radius-m;
     padding: 20px 0;
     font-size: 1rem;
     font-weight: 600;
@@ -267,7 +268,7 @@ const isComplete = computed(() => {
     transition: all 0.25s ease;
   }
 
-  /* 💚 왼쪽 버튼: 메인색 투명도 */
+//왼쪽
   .card-btn.left {
     background: #f5f5f5;
     color: #616161;
@@ -281,10 +282,10 @@ const isComplete = computed(() => {
     }
   }
     
-    /* ⚪ 오른쪽 버튼 */
+   //오른쪽
   .card-btn.right {
-    background: rgba(83, 180, 161, 0.15); /* 메인색 15% 투명 */
-    color: #2E7E73;                       /* 본래 메인 텍스트 색 */
+    background: rgba(83, 180, 161, 0.15); //15%
+    color: #2E7E73;                     
     border: 1.5px solid rgba(83, 180, 161, 0.25);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
   
@@ -296,12 +297,19 @@ const isComplete = computed(() => {
   }
   }
 
-/* 📱 모바일 대응 */
-@media (max-width: 1024px) {
-  .btn-group-wrap {
+
+  
+
+  @media (min-width: 1025px) {
+  .btn-group {
+    display: none !important;
+  }
+}
+//모바일
+@media (max-width: 480px) {
+  .btn-group {
     flex-direction: column;
     gap: 10px;
-
 
     .card-btn {
       padding: 16px 0;

@@ -56,7 +56,7 @@
 </div>
 
 <div class="form_group">
-  <label>대여 장소*</label>
+  <label>대여 지점*</label>
   <div class="addr-input">
     <input
       type="text"
