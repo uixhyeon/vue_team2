@@ -110,7 +110,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick,  } from "vue";
+import { ref, watch, nextTick } from "vue";
 
 //onMounted 삭제함..왤까
 
@@ -142,7 +142,7 @@ async function loadKakaoMapScript() {
     console.log("⚙️ Kakao Map SDK 이미 로드됨, 재사용");
     return;
   }
-  
+
   if (document.querySelector('script[src*="kakao.com/v2/maps/sdk.js"]')) {
     console.log("⚙️ Kakao Map SDK 스크립트 이미 존재");
     // ✅ 스크립트는 있지만 로드 안 됐을 수 있으니 대기
@@ -157,9 +157,9 @@ async function loadKakaoMapScript() {
     });
     return;
   }
-  
+
   const key = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
-  
+
   // ✅ autoload=false 사용 시 kakao.maps.load() 필수
   return new Promise((resolve) => {
     const s = document.createElement("script");
@@ -179,8 +179,8 @@ async function loadKakaoMapScript() {
   });
 }
 
-
 /* 지도 마운트 */
+/* 지도 마운트 - 최적화 버전 */
 async function mountMap() {
   if (!modalMapEl.value) {
     console.warn("⚠️ 지도 DOM이 아직 렌더되지 않음");
@@ -189,35 +189,46 @@ async function mountMap() {
 
   if (map && mapReady.value) {
     console.log("♻️ 기존 지도 재사용");
+    // ✅ 바로 리사이즈만 실행
+    requestAnimationFrame(() => {
+      window.kakao.maps.event.trigger(map, "resize");
+      map.relayout?.();
+    });
     return;
   }
 
-  // ✅ SDK 로드 (이미 로드되어 있으면 즉시 반환)
-  await loadKakaoMapScript();
-  
+  // ✅ SDK 이미 로드되어 있으면 바로 사용
+  if (!window.kakao?.maps) {
+    await loadKakaoMapScript();
+  }
+
   console.log("🗺️ 지도 생성 시작...");
 
-  // ✅ 지도 생성
   const defaultCenter = new window.kakao.maps.LatLng(36.5, 127.8);
+  
   map = new window.kakao.maps.Map(modalMapEl.value, {
     center: defaultCenter,
-    level: 12,
+    level: 8,  // 초기엔 넓게
+    scrollwheel: true,
+    draggable: true,
   });
+
+  const zoomControl = new window.kakao.maps.ZoomControl();
+  map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
 
   marker = new window.kakao.maps.Marker({ position: defaultCenter });
   marker.setMap(map);
 
   geocoder = new window.kakao.maps.services.Geocoder();
 
-  console.log("✅ 지도 객체 생성 완료:", !!map);
-
-  // ✅ 지도 리사이즈
-  await new Promise((r) => setTimeout(r, 200));
-  window.kakao.maps.event.trigger(map, "resize");
-  map.relayout?.();
-  
   mapReady.value = true;
   console.log("✅ 지도 준비 완료 - mapReady: true");
+
+  // ✅ 대기 시간 제거 + requestAnimationFrame 사용
+  requestAnimationFrame(() => {
+    window.kakao.maps.event.trigger(map, "resize");
+    map.relayout?.();
+  });
 }
 
 /* 지도 이동 */
@@ -228,6 +239,7 @@ function moveMapTo(location) {
   if (location.lat && location.lng) {
     const latlng = new window.kakao.maps.LatLng(location.lat, location.lng);
     map.setCenter(latlng);
+    map.setLevel(1);
     marker.setPosition(latlng);
     marker.setMap(map);
     console.log("📍 좌표 기반 지도 이동:", location.name, location.lat, location.lng);
@@ -242,7 +254,7 @@ function moveMapTo(location) {
     if (status === window.kakao.maps.services.Status.OK && results.length > 0) {
       const { x, y } = results[0];
       const latlng = new window.kakao.maps.LatLng(y, x);
-      map.setCenter(latlng);
+      map.panTo(latlng);
       marker.setPosition(latlng);
       marker.setMap(map);
       console.log("📍 주소 기반 지도 이동:", searchAddress);
@@ -252,8 +264,38 @@ function moveMapTo(location) {
   });
 }
 
+/* 지점 선택 */
+// async function selectLocation(location) {
+//   if (location.status === "점검중") return;
 
+//   const regionGroup = props.locations.find((g) => g.branches.some((b) => b.id === location.id));
+//   const locWithRegion = { ...location, region: regionGroup?.region || "" };
 
+//   if (!locWithRegion.region && location.region) {
+//     locWithRegion.region = location.region;
+//   }
+
+//   selectedLocation.value = locWithRegion;
+//   console.log("📍 선택된 지점:", locWithRegion.name, "좌표:", locWithRegion.lat, locWithRegion.lng);
+
+//   // ✅ 지도 준비 대기 (최대 3초)
+//   let tries = 0;
+//   while ((!map || !mapReady.value) && tries < 15) {
+//     console.log(`⏳ 지도 준비 중... (${tries + 1}/15)`);
+//     await new Promise((r) => setTimeout(r, 200));
+//     tries++;
+//   }
+
+//   // ✅ 지도 준비 완료 확인
+//   if (map && mapReady.value) {
+//     console.log("✅ 지도 이동 시작");
+//     moveMapTo(locWithRegion);
+//   } else {
+//     console.error("❌ 지도 준비 실패 - map:", !!map, "mapReady:", mapReady.value);
+//   }
+// }
+
+// 지점 위도경도로 수정
 /* 지점 선택 */
 async function selectLocation(location) {
   if (location.status === "점검중") return;
@@ -282,8 +324,36 @@ async function selectLocation(location) {
     moveMapTo(locWithRegion);
   } else {
     console.error("❌ 지도 준비 실패 - map:", !!map, "mapReady:", mapReady.value);
+
+    // 🆘 지도 준비 실패해도 → 좌표 있으면 강제 시도
+    if (window.kakao?.maps && modalMapEl.value && locWithRegion.lat && locWithRegion.lng) {
+      console.log("🚨 긴급 처리: 좌표로 강제 이동 시도");
+      try {
+        // 지도가 없으면 새로 생성
+        if (!map) {
+          const center = new window.kakao.maps.LatLng(locWithRegion.lat, locWithRegion.lng);
+          map = new window.kakao.maps.Map(modalMapEl.value, {
+            center: center,
+            level: 1,
+          });
+          marker = new window.kakao.maps.Marker({ position: center });
+          marker.setMap(map);
+          mapReady.value = true;
+          console.log("✅ 긴급 지도 생성 완료");
+        } else {
+          // 지도 있으면 이동만
+          const latlng = new window.kakao.maps.LatLng(locWithRegion.lat, locWithRegion.lng);
+          map.setCenter(latlng);
+          marker.setPosition(latlng);
+          console.log("✅ 긴급 좌표 이동 완료");
+        }
+      } catch (error) {
+        console.error("❌ 긴급 처리 실패:", error);
+      }
+    }
   }
 }
+
 /* 길찾기 */
 function openKakaoMapDirections(location) {
   const { name, lat, lng, address } = location;
@@ -319,15 +389,12 @@ watch(
       await nextTick();
       await mountMap();
 
-      // ✅ 지도 로드 후 강제 리사이즈
-      setTimeout(() => {
-        if (!map) return;
-        window.kakao.maps.event.trigger(map, "resize");
-        map.relayout?.();
-        window.dispatchEvent(new Event("resize"));
-        console.log("✅ 지도 리사이즈 완료");
-        if (selectedLocation.value?.address) moveMapTo(selectedLocation.value);
-      }, 400);
+      // ✅ 대기 시간 제거 + requestAnimationFrame 사용
+      if (selectedLocation.value?.address) {
+        requestAnimationFrame(() => {
+          moveMapTo(selectedLocation.value);
+        });
+      }
     } else {
       console.log("🔴 모달 닫힘 — 지도 유지 (재활용)");
     }
@@ -347,15 +414,13 @@ watch(
           clearInterval(wait);
         } else if (tries++ > 15) {
           console.warn("⚠ 지도 준비 실패 (selectedBranch watch)");
-         clearInterval(wait);
+          clearInterval(wait);
         }
       }, 300);
     }
   },
   { deep: true }
 );
-
-
 </script>
 
 <style scoped lang="scss">

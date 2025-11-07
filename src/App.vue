@@ -14,6 +14,20 @@ function onShowAlert(e) {
 
 onMounted(() => {
   window.addEventListener("show-alert", onShowAlert);
+  
+  // ✅ 카카오맵 SDK 사전 로드 (추가)
+  if (!window.kakao?.maps && !document.querySelector('script[src*="kakao.com"]')) {
+    const script = document.createElement('script');
+    const key = import.meta.env.VITE_KAKAO_MAP_APP_KEY;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${key}&libraries=services`;
+    script.async = true;
+    script.onload = () => {
+      window.kakao.maps.load(() => {
+        console.log('✅ 카카오맵 SDK 사전 로드 완료');
+      });
+    };
+    document.head.appendChild(script);
+  }
 });
 
 onUnmounted(() => {
