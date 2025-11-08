@@ -200,18 +200,20 @@ const saveAndPay = () => {
 };
 
 // 예약3로 열림
+// ✅ 수정된 코드
 function closeFinish() {
   showFinish.value = false;
   
   const query = {
     form: JSON.stringify(form.value),
-    totalPrice: finalTotal.value,
+    total: finalTotal.value,  // ✅ 'totalPrice' → 'total'로 변경
+    useCoupon: useCoupon.value,  // ✅ 추가
+    usePoints: usePoints.value,  // ✅ 추가
     payment: selectedPayment.value,
     orderId: orderId.value,
   };
   router.push({ path: "/reservation3", query });
 }
-
 
 
 

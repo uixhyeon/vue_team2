@@ -187,7 +187,7 @@ function searchAddress() {
   new window.daum.Postcode({
     oncomplete: (data) => {
       form.value.address = data.roadAddress || data.jibunAddress;
-      appContext.config.globalProperties.$alert("주소가 입력되었습니다 ✅");
+      appContext.config.globalProperties.$alert("주소가 입력되었습니다");
     },
   }).open();
 }
@@ -201,10 +201,10 @@ const validateEmail = () => {
 };
 
 const validatePassword = () => {
-  const pattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  const pattern = /^[A-Za-z\d]{8,}$/;
   errors.value.password = pattern.test(form.value.password)
     ? ""
-    : "영문+숫자 포함 8자 이상 입력해주세요.";
+    : "영문 또는 숫자를 8자 이상 입력해주세요.";
   validateConfirm();
 };
 
@@ -245,7 +245,7 @@ const submitForm = (e) => {
   validateAddress();
 
   if (!isFormValid.value) {
-    appContext.config.globalProperties.$alert("입력 정보를 다시 확인해주세요 ❌");
+    appContext.config.globalProperties.$alert("입력 정보를 다시 확인해주세요");
     return;
   }
 

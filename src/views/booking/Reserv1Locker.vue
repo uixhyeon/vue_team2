@@ -82,7 +82,7 @@
 </div>
 
 <div class="form_group">
-  <label>예약 기간*</label>
+  <label>대여 기간*</label>
   <!-- <VueDatePicker
   v-model="localForm.dateRange"
   range

@@ -14,7 +14,7 @@
           <div class="input-row">
             <input
               type="text"
-              placeholder="번호를 입력해 주세요"
+              placeholder="번호를 입력해주세요 (-제외)"
               v-model="phone"
               @input="validatePhone"
             />
@@ -27,9 +27,9 @@
               인증 요청
             </button>
           </div>
-          <p class="desc" :style="{ color: phoneError ? '#e53935' : '#999' }">
-            {{ phoneError || '휴대폰 번호를 입력해주세요 (-제외)' }}
-          </p>
+ <p class="desc" v-if="phoneError" :style="{ color: '#e53935' }">
+  {{ phoneError }}
+</p>
         </div>
 
         <!-- 인증번호 -->
@@ -110,15 +110,15 @@ const isPhoneValid = ref(false);
 const validatePhone = () => {
   const pattern = /^010\d{8}$/; // 010으로 시작 + 8자리 = 11자리
   if (phone.value === "") {
-    phoneError.value = "";
+    phoneError.value = ""; // 비어있을 때만 표시
     isPhoneValid.value = false;
     return;
   }
   if (!pattern.test(phone.value)) {
-    phoneError.value = "올바른 번호 형식이 아닙니다.";
+    phoneError.value = "숫자 11자리를 입력해주세요 (- 제외)";
     isPhoneValid.value = false;
   } else {
-    phoneError.value = "";
+    phoneError.value = ""; // 유효하면 메시지 제거
     isPhoneValid.value = true;
   }
 };
@@ -346,6 +346,7 @@ const onSubmit = () => {
       &:focus {
         border-bottom-color: $color_main_background;
       }
+      
     }
   }
 
@@ -412,6 +413,13 @@ const onSubmit = () => {
   &:hover {
     background: $color_main_deep ;
   }
+
+      &:disabled {
+      background: #ccc;
+      color: #fff;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
 }
 
 //반응형

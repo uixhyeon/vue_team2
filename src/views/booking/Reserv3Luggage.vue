@@ -21,7 +21,7 @@
           <div class="addr-input">
             <input
               type="text"
-              placeholder="받으실 주소를 선택해주세요"
+              placeholder="받으실 주소를 검색해주세요"
               v-model="localForm.homeAddress"
               readonly
               @focus="$emit('touch', 'homeAddress')"
@@ -38,7 +38,7 @@
 
         <!-- 상세주소 -->
         <div class="form_group">
-          <label>상세주소*</label>
+          <!-- <label>상세주소*</label> -->
           <input
             type="text"
             placeholder="상세주소를 입력해주세요"
@@ -56,7 +56,7 @@
       
 <!-- 배송일 -->
 <div class="form_group">
-  <!-- <label>배송지정일*</label> -->
+  <label>배송지정일*</label>
 <VueDatePicker
   v-model="localForm.deliveryDate"
   locale="ko"
@@ -74,6 +74,14 @@
     {{ errors.deliveryDate }}
   </p>
 </div>
+
+<!-- 배송요청사항(디데이픽커오류) -->
+    <div class="form_group">
+  <label>배송 요청사항</label>
+  <input 
+   placeholder="배송시 요청사항을 입력해주세요 (선택)"
+  type="text">
+  </div>
 
 
             <!-- @추가함 -->

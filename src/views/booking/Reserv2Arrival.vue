@@ -21,7 +21,7 @@
           <div class="addr-input">
             <input
               type="text"
-              placeholder="픽업하실 주소를 입력해주세요"
+              placeholder="픽업하실 주소를 검색해주세요"
               v-model="localForm.pickupAddress"
               readonly
               @focus="$emit('touch', 'pickupAddress')"
@@ -38,7 +38,7 @@
 
         <!-- 상세주소 -->
         <div class="form_group">
-          <label>상세주소*</label>
+          <!-- <label>상세주소*</label> -->
           <input
             type="text"
             placeholder="상세주소를 입력해주세요"
@@ -74,6 +74,13 @@
     {{ errors.pickupDate }}
   </p>
 </div>
+<!-- 픽업 요청사항(디데이픽커오류) -->
+    <div class="form_group">
+  <label>픽업 요청사항</label>
+  <input 
+   placeholder="픽업시 요청사항을 입력해주세요 (선택)"
+  type="text">
+  </div>
 
         <!-- @@@@@@@@@@@@@@@@추가함 -->
        <div class="btn-grup-wrap">

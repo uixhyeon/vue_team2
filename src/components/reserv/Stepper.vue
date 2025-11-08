@@ -26,7 +26,7 @@ defineProps({
   },
 });
 
-const steps = ["예약 하기", "확인 및 결제", "예약 완료"];
+const steps = ["예약하기", "확인 및 결제", "예약 완료"];
 
 const windowWidth = ref(window.innerWidth);
 const handleResize = () => (windowWidth.value = window.innerWidth);

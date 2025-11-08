@@ -412,7 +412,8 @@ const validateForm = () => {
   const f = form.value;
   const err = {};
   if (!f.name?.trim()) err.name = "이름을 입력해주세요";
-  if (!f.phone || !/^(010|011|016|017|018|019)\d{7,8}$/.test(f.phone)) err.phone = "휴대폰 번호를 입력해주세요 (-제외)";
+if (!f.phone || !/^010\d{8}$/.test(f.phone)) 
+  err.phone = "010으로 시작하는 11자리 숫자를 입력해주세요 (- 제외)";
   if (!f.size) err.size = "사물함 사이즈를 선택해주세요";
   if (!f.address) err.address = "대여 장소를 선택해주세요";
   if (!f.dateRange || f.dateRange.length < 2 || f.dateRange[0] === f.dateRange[1])
@@ -439,7 +440,9 @@ watch(
     const err = {};
 
     if (!f.name?.trim()) err.name = "이름을 입력해주세요";
-    if (!f.phone || !/^\d{10,11}$/.test(f.phone)) err.phone = "휴대폰 번호로 입력해주세요 (-제외)";
+   if (!f.phone || !/^010\d{8}$/.test(f.phone)) 
+  err.phone = "숫자 11자리를 입력해주세요 (- 제외)";
+
     if (!f.size) err.size = "사물함 사이즈를 선택해주세요";
     if (!f.address) err.address = "대여 장소를 선택해주세요";
 
